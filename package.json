@@ -1,6 +1,6 @@
 {
   "name": "estimate-me",
-  "version": "1.0.0",
+  "version": "0.0.1",
   "private": false,
   "author": {
     "name": "Felix Brüning",
@@ -17,7 +17,9 @@
     "express": "^4.17.1",
     "prettier": "^1.19.1",
     "socket.io": "^2.3.0",
-    "vue": "^2.6.11"
+    "socket.io-client": "^2.3.0",
+    "vue": "^2.6.11",
+    "vue-socket.io-extended": "^4.0.1"
   },
   "devDependencies": {
     "@vue/cli-plugin-babel": "~4.2.0",
@@ -26,6 +28,7 @@
     "babel-eslint": "^10.0.3",
     "eslint": "^6.7.2",
     "eslint-plugin-vue": "^6.1.2",
+    "nodemon": "^2.0.2",
     "vue-template-compiler": "^2.6.11"
   },
   "eslintConfig": {
@@ -46,7 +49,7 @@
     "> 1%",
     "last 2 versions"
   ],
-  "_id": "estimate-me@1.0.0",
+  "_id": "estimate-me@0.0.1",
   "license": "MIT",
-  "readme": "ERROR: No README data found!"
+  "readme": "README.md"
 }
