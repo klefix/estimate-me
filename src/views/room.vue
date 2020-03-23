@@ -8,31 +8,19 @@
       Joining room...
     </div>
     <div v-else>
-      <div class="chart-container">
-        <estimation-chart :chart-data="chartData" />
+      <div class="row">
+        <div class="chart-container">
+          <estimation-chart :chart-data="chartData" />
+        </div>
       </div>
 
       <div class="row">
         <div class="user" v-for="user in users" :key="user.id">
-          <h5>{{ user.name || user.id }}</h5>
-          <div class="inset">
+          <div class="estimation">
             {{ user.estimation }}
           </div>
+          <h5>{{ user.name || user.id }}</h5>
         </div>
-      </div>
-
-      <div class="row">
-        <div class="col">
-          <input
-            type="text"
-            placeholder="Your name..."
-            v-model="name"
-            v-on:keyup.enter="setName()"
-          />
-          &nbsp;
-          <button @click="setName()">Set Name</button>
-        </div>
-        <div class="col"></div>
       </div>
 
       <div class="row">
@@ -43,14 +31,19 @@
         </div>
       </div>
 
-      <button @click="disconnect">Disconnect</button>
-
       <div class="row">
-        <div>
-          Message from server:
-          <p>
-            {{ socketMessage }}
-          </p>
+        <div class="col">
+          <input
+             type="text"
+             placeholder="Your name..."
+             v-model="name"
+             v-on:keyup.enter="setName()"
+          />
+          &nbsp;
+          <button @click="setName()">Set Name</button>
+        </div>
+        <div class="col">
+          <button @click="disconnect">Disconnect</button>
         </div>
       </div>
     </div>
@@ -93,7 +86,6 @@ export default {
             label: 'Estimations',
             backgroundColor: '#f87979',
             data: this.estimations,
-            spanGaps: true,
           },
         ],
       }

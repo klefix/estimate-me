@@ -1,23 +1,24 @@
 <script>
-import { Radar, mixins } from 'vue-chartjs'
+import { Bar, mixins } from 'vue-chartjs'
 const { reactiveProp } = mixins
 
 export default {
-  extends: Radar,
+  extends: Bar,
   mixins: [reactiveProp],
 
   data() {
     return {
       options: {
-        scale: {
-          angleLines: {
-            display: false
-          },
-          ticks: {
-            beginAtZero: true,
-            min: 0,
-            step: 1,
-          },
+        scales: {
+          yAxes: [
+            {
+              ticks: {
+                min: 0,
+                stepSize: 1,
+                maxTicksLimit: 10,
+              },
+            }
+          ]
         },
       },
     }
