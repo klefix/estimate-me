@@ -10,15 +10,12 @@ yarn install
 yarn serve
 ```
 
-### Compiles and minifies for production
+### Starts server and hot-reloads for development
 ```
-yarn build
-```
-
-### Lints and fixes files
-```
-yarn lint
+yarn server:dev
 ```
 
-### Customize configuration
-See [Configuration Reference](https://cli.vuejs.org/config/).
+### Starts server for production
+```
+yarn server:start
+```
