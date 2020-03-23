@@ -8,6 +8,10 @@
       Joining room...
     </div>
     <div v-else>
+      <div class="chart-container">
+        <estimation-chart :chart-data="chartData" />
+      </div>
+
       <div class="row">
         <div class="user" v-for="user in users" :key="user.id">
           <h5>{{ user.name || user.id }}</h5>
@@ -54,9 +58,15 @@
 </template>
 
 <script>
+import EstimationChart from '../components/estimationChart.vue'
+
 let reconnectionInterval = undefined
 
 export default {
+  components: {
+    EstimationChart,
+  },
+
   data() {
     return {
       roomName: this.$route.params.roomName,
@@ -67,7 +77,33 @@ export default {
       users: {},
       numbers: [1, 2, 3, 5, 8, 13, 21],
       name: '',
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+      },
     }
+  },
+
+  computed: {
+    chartData: function() {
+      return {
+        labels: this.numbers,
+        datasets: [
+          {
+            label: 'Estimations',
+            backgroundColor: '#f87979',
+            data: this.estimations,
+            spanGaps: true,
+          },
+        ],
+      }
+    },
+    estimations: function() {
+      const intArr = this.users.map(user => user.estimation)
+      return this.numbers.map(
+        fibNum => intArr.filter(x => x === fibNum).length || null
+      )
+    },
   },
 
   mounted() {
@@ -101,7 +137,6 @@ export default {
     },
 
     userList(users) {
-      console.log({users})
       this.users = users.sort((a, b) => a.$loki > b.$loki)
     },
 

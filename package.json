@@ -15,6 +15,7 @@
   },
   "main": "index.js",
   "dependencies": {
+    "chart.js": "^2.9.3",
     "core-js": "^3.6.4",
     "esm": "^3.2.25",
     "express": "^4.17.1",
@@ -23,6 +24,7 @@
     "socket.io": "^2.3.0",
     "socket.io-client": "^2.3.0",
     "vue": "^2.6.11",
+    "vue-chartjs": "^3.5.0",
     "vue-router": "^3.1.6",
     "vue-socket.io-extended": "^4.0.1"
   },
