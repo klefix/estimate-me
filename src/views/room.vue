@@ -91,7 +91,10 @@ export default {
       }
     },
     estimations: function() {
-      const intArr = this.users.map(user => user.estimation)
+      if(!this.users) {
+        return []
+      }
+      const intArr = Object.values(this.users).map(user => user.estimation)
       return this.numbers.map(
         fibNum => intArr.filter(x => x === fibNum).length || null
       )
