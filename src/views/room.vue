@@ -85,8 +85,6 @@ export default {
       roomName: this.$route.params.roomName,
       roomId: undefined,
       isConnected: false,
-      socketMessage: '',
-      values: [],
       users: [],
       numbers: [1, 2, 3, 5, 8, 13, 21, '?'],
       name: '',
@@ -149,10 +147,6 @@ export default {
       this.isConnected = false
     },
 
-    serverMessage(data) {
-      this.socketMessage = data
-    },
-
     userList(users) {
       this.users = users.sort((a, b) => a.$loki > b.$loki)
     },
@@ -160,6 +154,10 @@ export default {
     joinedRoom(roomId) {
       this.roomId = roomId
     },
+
+    estimationsCleared() {
+      this.estimation = null
+    }
   },
 
   methods: {

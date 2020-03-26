@@ -8,13 +8,14 @@ import App from './App.vue'
 import Intro from './views/intro.vue'
 import Room from './views/room.vue'
 
-// TODO: get from env
-const SERVER_PORT = 3000;
-
 import '@fortawesome/fontawesome-free/css/all.css'
 import './assets/scss/main.scss'
 
-export const SocketInstance = socketClient(`http://localhost:${SERVER_PORT}`)
+
+const { VUE_APP_SERVER_PORT } = process.env;
+console.log(VUE_APP_SERVER_PORT)
+
+export const SocketInstance = socketClient(`http://localhost:${VUE_APP_SERVER_PORT}`)
 
 const routes = [
   { path: '/', component: Intro },

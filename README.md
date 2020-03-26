@@ -32,3 +32,4 @@ yarn server:dev
 ### TODO
 1. add configurable countdown (e.g. 2, 3, 5 mins, etc)
 1. add statistics about the current estimation (min, max, avg)
+1. make numbers configurable for admin

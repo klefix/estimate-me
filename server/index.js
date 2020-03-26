@@ -2,9 +2,11 @@ const app = require('express')()
 const http = require('http').createServer(app)
 const io = require('socket.io')(http)
 const loki = require('lokijs')
+const dotenv = require('dotenv-flow')
 
-// TODO: get from env
-const SERVER_PORT = 3000
+dotenv.config()
+
+const { NODEJS_SERVER_PORT } = process.env;
 
 const db = new loki('estimate-me.db')
 
@@ -141,6 +143,7 @@ io.on('connection', function(socket) {
       currentRoom.estimationsVisible = false
       rooms.update(currentRoom)
       updateUserList()
+      emitToRoom('estimationsCleared')
     }
   })
 
@@ -151,6 +154,6 @@ io.on('connection', function(socket) {
   })
 })
 
-http.listen(SERVER_PORT, function() {
-  console.log(`listening on *:${SERVER_PORT}`)
+http.listen(NODEJS_SERVER_PORT, function() {
+  console.log(`listening on *:${NODEJS_SERVER_PORT}`)
 })
