@@ -21,6 +21,11 @@
       <button ref="joinBtn" :class="{ active: btnActive }" @click="joinRoom">
         Create Or Join
       </button>
+      <br>
+      <br>
+      <p>The first user to enter a room will be admin of the room.</p>
+      <p>If the admin leaves, some other user will get the admin role.</p>
+      <p>Only admins can clear or reveal estimations.</p>
     </div>
   </div>
 </template>
