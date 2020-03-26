@@ -9,6 +9,16 @@
     </div>
     <div v-else>
       <div class="row">
+        <div v-if="currentUserIsAdmin" class="controls">
+          <div class="row">
+            <div class="col">
+              <button @click="clearEstimations()">Clear Estimations</button>
+            </div>
+            <div class="col">
+              <button @click="revealEstimations()">Reveal Estimations</button>
+            </div>
+          </div>
+        </div>
         <div class="chart-container">
           <estimation-chart :chart-data="chartData" />
         </div>
@@ -16,16 +26,26 @@
 
       <div class="row">
         <div class="user" v-for="user in users" :key="user.id">
-          <div class="estimation">
-            {{ user.estimation }}
+          <div class="role-icon">
+            <i v-if="isAdmin(user)" class="fas fa-crown"></i>
+            <i
+              v-if="user.roles.includes('TRACK_TIME')"
+              class="fas fa-clock"
+            ></i>
           </div>
-          <h5>{{ user.name || user.id }}</h5>
+          <i v-if="user.name !== ''" class="fas fa-user"></i>
+          <i v-else class="fas fa-user-secret"></i>
+          <div class="name">{{ user.name }}</div>
+          <div class="estimation">
+            <i v-if="user.estimation === true" class="fas fa-check"></i>
+            <span v-else>{{ user.estimation }}</span>
+          </div>
         </div>
       </div>
 
       <div class="row">
         <div class="col" v-for="number in numbers" :key="number">
-          <button class="number" @click="estimate(number)">
+          <button :class="{number: true, active: estimation === number}" @click="estimate(number)">
             {{ number }}
           </button>
         </div>
@@ -34,10 +54,10 @@
       <div class="row">
         <div class="col">
           <input
-             type="text"
-             placeholder="Your name..."
-             v-model="name"
-             v-on:keyup.enter="setName()"
+            type="text"
+            placeholder="Your name..."
+            v-model="name"
+            v-on:keyup.enter="setName()"
           />
           &nbsp;
           <button @click="setName()">Set Name</button>
@@ -67,9 +87,10 @@ export default {
       isConnected: false,
       socketMessage: '',
       values: [],
-      users: {},
-      numbers: [1, 2, 3, 5, 8, 13, 21],
+      users: [],
+      numbers: [1, 2, 3, 5, 8, 13, 21, '?'],
       name: '',
+      estimation: null,
       options: {
         responsive: true,
         maintainAspectRatio: false,
@@ -91,7 +112,7 @@ export default {
       }
     },
     estimations: function() {
-      if(!this.users) {
+      if (!this.users) {
         return []
       }
       const intArr = Object.values(this.users).map(user => user.estimation)
@@ -99,10 +120,15 @@ export default {
         fibNum => intArr.filter(x => x === fibNum).length || null
       )
     },
+    currentUser: function() {
+      return this.users.find(user => user.id === this.$socket.client.id)
+    },
+    currentUserIsAdmin: function() {
+      return this.isAdmin(this.currentUser)
+    },
   },
 
   mounted() {
-    console.log('Mounted')
     this.isConnected = this.$socket.connected
 
     reconnectionInterval = setInterval(this.reconnect, 1000)
@@ -125,10 +151,6 @@ export default {
 
     serverMessage(data) {
       this.socketMessage = data
-    },
-
-    estimatedValues(values) {
-      this.values = values
     },
 
     userList(users) {
@@ -159,6 +181,7 @@ export default {
     },
 
     estimate(value) {
+      this.estimation = value
       this.$socket.client.emit('setEstimation', value)
     },
 
@@ -170,6 +193,21 @@ export default {
 
     disconnect() {
       this.$socket.client.disconnect()
+    },
+
+    isAdmin(user) {
+      if (!user) {
+        return false
+      }
+      return user.roles.includes('ADMIN')
+    },
+
+    clearEstimations() {
+      this.$socket.client.emit('clearEstimations')
+    },
+
+    revealEstimations() {
+      this.$socket.client.emit('revealEstimations')
     },
   },
 }

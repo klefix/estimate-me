@@ -11,7 +11,8 @@ import Room from './views/room.vue'
 // TODO: get from env
 const SERVER_PORT = 3000;
 
-import './assets/css/main.css'
+import '@fortawesome/fontawesome-free/css/all.css'
+import './assets/scss/main.scss'
 
 export const SocketInstance = socketClient(`http://localhost:${SERVER_PORT}`)
 
