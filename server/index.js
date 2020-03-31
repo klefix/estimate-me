@@ -1,67 +1,21 @@
 const app = require('express')()
 const http = require('http').createServer(app)
 const io = require('socket.io')(http)
-const loki = require('lokijs')
-const dotenv = require('dotenv-flow')
 
+const dotenv = require('dotenv-flow')
 dotenv.config()
 
-const { NODEJS_SERVER_PORT } = process.env;
+import { rooms, findOrCreateRoom, numClientsInRoom } from './rooms'
+import { createUser, isAdmin, users, ROLE_ADMIN } from './users'
 
-const db = new loki('estimate-me.db')
+import { log, renderEstimation } from './utils'
 
-const rooms = db.addCollection('rooms')
-const users = db.addCollection('users')
-
-const ROLE_ADMIN = 'ADMIN'
-
-const log = (msg, msg2) => {
-  const date = new Date().toDateString().toLocaleString()
-
-  let str = `[${date}]: ${msg}`
-  if (msg2) {
-    str += ' ' + msg2
-  }
-  console.log(str)
-}
-
-const findOrCreateRoom = roomName => {
-  let room = rooms.findOne({ name: roomName })
-  if (!room) {
-    room = rooms.insert({ name: roomName, estimationsVisible: false })
-  }
-  return room
-}
-
-function numClientsInRoom(roomId) {
-  const room = io.sockets.adapter.rooms[roomId]
-  if (!room) {
-    return -1
-  }
-  return room.length
-}
-
-function isAdmin(user) {
-  return user.roles.includes(ROLE_ADMIN)
-}
-
-const estimationDisplay = (user, currentRoom) => {
-  if (currentRoom.estimationsVisible && user.estimation !== null) {
-    return user.estimation
-  }
-  return user.estimation !== null ? true : null
-}
+const { NODEJS_SERVER_PORT } = process.env
 
 io.on('connection', function(socket) {
   log(`user ${socket.id} connected`)
 
-  const currentUser = users.insert({
-    id: socket.id,
-    name: '',
-    estimation: '',
-    room: null,
-    roles: [],
-  })
+  const currentUser = users.insert(createUser(socket.id))
 
   let currentRoom = null
 
@@ -78,7 +32,7 @@ io.on('connection', function(socket) {
   const maskEstimations = users =>
     users.map(user => ({
       ...user,
-      estimation: estimationDisplay(user, currentRoom),
+      estimation: renderEstimation(user, currentRoom),
     }))
 
   socket.on('joinRoom', function(roomName) {
@@ -89,12 +43,11 @@ io.on('connection', function(socket) {
     currentUser.room = room.$loki
 
     socket.join(room.$loki)
-    if (numClientsInRoom(room.$loki) === 1) {
+    if (numClientsInRoom(io, room.$loki) === 1) {
       currentUser.roles.push(ROLE_ADMIN)
     }
     socket.emit('joinedRoom', room.$loki)
 
-    emitToRoom('serverMessage', `User ${currentUser.name} joined ${roomName}`)
     emitToRoom('userList', maskEstimations(roomUsers()))
   })
 
@@ -121,7 +74,8 @@ io.on('connection', function(socket) {
 
     socket.leave(currentUser.room)
     users.remove(currentUser)
-    if (currentUser.roles.includes(ROLE_ADMIN)) {
+
+    if (isAdmin(currentUser)) {
       const otherUsers = roomUsers()
       if (otherUsers.length > 0) {
         const nextAdmin = otherUsers[0]
@@ -130,27 +84,49 @@ io.on('connection', function(socket) {
       }
     }
 
-    emitToRoom('serverMessage', `User ${currentUser.name} disconnected`)
     updateUserList()
   })
 
   socket.on('clearEstimations', function() {
-    if (isAdmin(currentUser)) {
-      roomUsers().forEach(user => {
-        user.estimation = null
-        users.update(user)
-      })
-      currentRoom.estimationsVisible = false
-      rooms.update(currentRoom)
-      updateUserList()
-      emitToRoom('estimationsCleared')
+    if (!isAdmin(currentUser)) {
+      return
     }
+
+    roomUsers().forEach(user => {
+      user.estimation = null
+      users.update(user)
+    })
+    currentRoom.estimationsVisible = false
+    rooms.update(currentRoom)
+    updateUserList()
+    emitToRoom('estimationsCleared')
   })
 
   socket.on('revealEstimations', function() {
+    if (!isAdmin(currentUser)) {
+      return
+    }
+
     currentRoom.estimationsVisible = true
     rooms.update(currentRoom)
     updateUserList()
+  })
+
+  socket.on('grantAdmin', function(userId) {
+    log('grantAdmin', userId)
+    if (!isAdmin(currentUser)) {
+      return
+    }
+
+    const result = users.find({ id: userId })
+
+    if (result && result.length === 1) {
+      const otherUser = result[0]
+      otherUser.roles.push(ROLE_ADMIN)
+      currentUser.roles = [] // TODO: remove admin role instead of clearing all...
+      users.update(otherUser, currentUser)
+      updateUserList()
+    }
   })
 })
 

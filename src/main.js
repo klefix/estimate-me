@@ -12,10 +12,9 @@ import '@fortawesome/fontawesome-free/css/all.css'
 import './assets/scss/main.scss'
 
 
-const { VUE_APP_SERVER_PORT } = process.env;
-console.log(VUE_APP_SERVER_PORT)
+const { VUE_APP_SERVER_URI } = process.env;
 
-export const SocketInstance = socketClient(`http://localhost:${VUE_APP_SERVER_PORT}`)
+export const SocketInstance = socketClient(VUE_APP_SERVER_URI)
 
 const routes = [
   { path: '/', component: Intro },

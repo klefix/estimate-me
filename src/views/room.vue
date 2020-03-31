@@ -10,24 +10,29 @@
     <div v-else>
       <div class="row">
         <div v-if="currentUserIsAdmin" class="controls">
-          <div class="row">
-            <div class="col">
-              <button @click="clearEstimations()">Clear Estimations</button>
-            </div>
-            <div class="col">
-              <button @click="revealEstimations()">Reveal Estimations</button>
-            </div>
-          </div>
+          <p>You are the admin of this room!</p>
+          <p>
+            To make someone else admin, move the cursor above their head and
+            click the appearing crown icon.
+          </p>
+          <button @click="clearEstimations()">Clear Estimations</button>
+          <br />
+          <button @click="revealEstimations()">Reveal Estimations</button>
         </div>
         <div class="chart-container">
           <estimation-chart :chart-data="chartData" />
         </div>
       </div>
 
-      <div class="row">
+      <div class="row wrap">
         <div class="user" v-for="user in users" :key="user.id">
           <div class="role-icon">
             <i v-if="isAdmin(user)" class="fas fa-crown"></i>
+            <i
+              v-if="currentUserIsAdmin && user !== currentUser"
+              class="fas fa-crown shadow"
+              @click="grantAdmin(user)"
+            ></i>
             <i
               v-if="user.roles.includes('TRACK_TIME')"
               class="fas fa-clock"
@@ -43,9 +48,12 @@
         </div>
       </div>
 
-      <div class="row">
-        <div class="col" v-for="number in numbers" :key="number">
-          <button :class="{number: true, active: estimation === number}" @click="estimate(number)">
+      <div class="row wrap">
+        <div class="number" v-for="number in numbers" :key="number">
+          <button
+            :class="{ number: true, active: estimation === number }"
+            @click="estimate(number)"
+          >
             {{ number }}
           </button>
         </div>
@@ -63,7 +71,9 @@
           <button @click="setName()">Set Name</button>
         </div>
         <div class="col">
-          <button @click="disconnect">Disconnect</button>
+          <button @click="disconnect">Reconnect</button>
+          <br />
+          <router-link to="/" class="btn">Leave</router-link>
         </div>
       </div>
     </div>
@@ -93,6 +103,7 @@ export default {
         responsive: true,
         maintainAspectRatio: false,
       },
+      dndOptions: this.currentDndOptions,
     }
   },
 
@@ -157,7 +168,7 @@ export default {
 
     estimationsCleared() {
       this.estimation = null
-    }
+    },
   },
 
   methods: {
@@ -179,6 +190,10 @@ export default {
     },
 
     estimate(value) {
+      // allow deselect of number/button
+      if (this.estimation === value) {
+        value = null
+      }
       this.estimation = value
       this.$socket.client.emit('setEstimation', value)
     },
@@ -206,6 +221,10 @@ export default {
 
     revealEstimations() {
       this.$socket.client.emit('revealEstimations')
+    },
+
+    grantAdmin(user) {
+      this.$socket.client.emit('grantAdmin', user.id)
     },
   },
 }

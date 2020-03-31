@@ -1,0 +1,17 @@
+{
+  "name": "estimation-server",
+  "version": "1.0.0",
+  "main": "index.js",
+  "license": "MIT",
+  "author": {
+    "name": "Felix Brüning",
+    "email": "info@felixbruening.de"
+  },
+  "dependencies": {
+    "dotenv-flow": "^3.1.0",
+    "esm": "^3.2.25",
+    "express": "^4.17.1",
+    "lokijs": "^1.5.8",
+    "socket.io": "^2.3.0"
+  }
+}
