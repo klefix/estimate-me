@@ -1,93 +1,75 @@
 <template>
-  <div>
-    <h1>{{ roomName }}</h1>
+  <div class="grid">
     <div v-if="!isConnected">
       Connecting...
     </div>
     <div v-else-if="!roomId">
       Joining room...
     </div>
-    <div v-else>
-      <div class="row">
-        <div v-if="currentUserIsAdmin" class="controls">
+    <div :class="['ui_grid', currentUserIsAdmin && 'ui_grid--admin' ]" v-else>
+      <div v-if="currentUserIsAdmin" class="admin_controls">
+        <section>
           <p>You are the admin of this room!</p>
           <p>
             To make someone else admin, move the cursor above their head and
             click the appearing crown icon.
           </p>
-          <button @click="clearEstimations()">Clear Estimations</button>
-          <br />
-          <button @click="revealEstimations()">Reveal Estimations</button>
+        </section>
+        <div>
+          <BaseButton variant="danger" @click="clearEstimations()">
+            Clear Estimations
+          </BaseButton>
         </div>
-        <div class="chart-container">
-          <estimation-chart :chart-data="chartData" />
+        <div>
+          <BaseButton variant="primary" @click="revealEstimations()">
+            Reveal Estimations
+          </BaseButton>
         </div>
+      </div>
+      <div class="chart-container">
+        <estimation-chart :chart-data="chartData" />
       </div>
 
-      <div class="row wrap">
-        <div class="user" v-for="user in users" :key="user.id">
-          <div class="role-icon">
-            <i v-if="isAdmin(user)" class="fas fa-crown"></i>
-            <i
-              v-if="currentUserIsAdmin && user !== currentUser"
-              class="fas fa-crown shadow"
-              @click="grantAdmin(user)"
-            ></i>
-            <i
-              v-if="user.roles.includes('TRACK_TIME')"
-              class="fas fa-clock"
-            ></i>
-          </div>
-          <i v-if="user.name !== ''" class="fas fa-user"></i>
-          <i v-else class="fas fa-user-secret"></i>
-          <div class="name">{{ user.name }}</div>
-          <div class="estimation">
-            <i v-if="user.estimation === true" class="fas fa-check"></i>
-            <span v-else>{{ user.estimation }}</span>
-          </div>
-        </div>
+      <div class="users">
+        <UserCard
+          v-for="user in users"
+          :key="user.id"
+          :user="user"
+          :currentUser="currentUser"
+        />
       </div>
 
-      <div class="row wrap">
-        <div class="number" v-for="number in numbers" :key="number">
-          <button
-            :class="{ number: true, active: estimation === number }"
-            @click="estimate(number)"
-          >
-            {{ number }}
-          </button>
-        </div>
-      </div>
+      <EstimationNumbers
+        class="estimation-numbers"
+        :numbers="numbers"
+        :estimation="estimation"
+        @estimated="
+          (value) => {
+            estimate(value)
+          }
+        "
+      />
 
-      <div class="row">
-        <div class="col">
-          <input
-            type="text"
-            placeholder="Your name..."
-            v-model="name"
-            v-on:keyup.enter="setName()"
-          />
-          &nbsp;
-          <button @click="setName()">Set Name</button>
-        </div>
-        <div class="col">
-          <button @click="disconnect">Reconnect</button>
-          <br />
-          <router-link to="/" class="btn">Leave</router-link>
-        </div>
-      </div>
+      <UserControls class="user-controls" />
     </div>
   </div>
 </template>
 
 <script>
+import BaseButton from '../components/baseButton.vue'
 import EstimationChart from '../components/estimationChart.vue'
-
+import EstimationNumbers from '../components/estimationNumbers.vue'
+import UserCard from '../components/userCard.vue'
+import UserControls from '../components/userControls.vue'
 let reconnectionInterval = undefined
 
 export default {
   components: {
+    BaseButton,
     EstimationChart,
+    EstimationNumbers,
+    UserCard,
+    UserControls,
   },
 
   data() {
@@ -108,7 +90,7 @@ export default {
   },
 
   computed: {
-    chartData: function() {
+    chartData: function () {
       return {
         labels: this.numbers,
         datasets: [
@@ -120,20 +102,25 @@ export default {
         ],
       }
     },
-    estimations: function() {
+    estimations: function () {
       if (!this.users) {
         return []
       }
-      const intArr = Object.values(this.users).map(user => user.estimation)
+      const intArr = Object.values(this.users).map((user) => user.estimation)
       return this.numbers.map(
-        fibNum => intArr.filter(x => x === fibNum).length || null
+        (fibNum) => intArr.filter((x) => x === fibNum).length || null
       )
     },
-    currentUser: function() {
-      return this.users.find(user => user.id === this.$socket.client.id)
+
+    currentUser: function () {
+      return this.users.find((user) => user.id === this.$socket.client.id)
     },
-    currentUserIsAdmin: function() {
-      return this.isAdmin(this.currentUser)
+
+    currentUserIsAdmin: function () {
+      if (!this.currentUser) {
+        return false
+      }
+      return this.currentUser.roles.includes('ADMIN')
     },
   },
 
@@ -186,7 +173,6 @@ export default {
     joinRoom() {
       console.log('Joining Room...')
       this.$socket.client.emit('joinRoom', this.roomName)
-      this.setName()
     },
 
     estimate(value) {
@@ -198,23 +184,6 @@ export default {
       this.$socket.client.emit('setEstimation', value)
     },
 
-    setName() {
-      if (this.name) {
-        this.$socket.client.emit('setName', this.name)
-      }
-    },
-
-    disconnect() {
-      this.$socket.client.disconnect()
-    },
-
-    isAdmin(user) {
-      if (!user) {
-        return false
-      }
-      return user.roles.includes('ADMIN')
-    },
-
     clearEstimations() {
       this.$socket.client.emit('clearEstimations')
     },
@@ -222,10 +191,99 @@ export default {
     revealEstimations() {
       this.$socket.client.emit('revealEstimations')
     },
-
-    grantAdmin(user) {
-      this.$socket.client.emit('grantAdmin', user.id)
-    },
   },
 }
 </script>
+<style lang="scss" scoped>
+.grid {
+  position: relative;
+  display: grid;
+  grid-template-columns: 1fr;
+  grid-gap: 1rem;
+  padding: 1rem;
+  transition: transform 300ms ease-in;
+}
+
+.roomname {
+  margin: 0;
+}
+
+.ui_grid {
+  display: grid;
+  grid-template-areas: 'graph'
+  'estimation'
+  'users'
+  'controls';
+  grid-template-columns: 1fr;
+  grid-template-rows: auto;
+  grid-gap: 2rem;
+  max-width: 100%;
+}
+
+.ui_grid--admin {
+  grid-template-areas: 'graph'
+  'adminArea'
+  'estimation'
+  'users'
+  'controls';
+}
+
+@media(min-width: 768px) {
+  .ui_grid {
+    grid-template-areas: 'estimation estimation graph'
+    'users users users'
+    'controls controls controls';
+    grid-template-columns: 1fr 1fr 300px;
+    grid-template-rows: repeat(3, auto);
+  }
+  .ui_grid--admin {
+    grid-template-areas: 'adminArea adminArea graph'
+    'estimation estimation graph'
+    'users users users'
+    'controls controls controls';
+    grid-template-rows: repeat(4, auto);
+    grid-gap: 2rem;
+  }
+}
+
+.admin_controls {
+  grid-area: adminArea;
+  display: grid;
+  grid-template-columns: 1fr;
+  grid-gap: 1rem;
+}
+
+.users {
+  grid-area: users;
+  display: grid;
+  justify-content: start;
+  grid-template-columns: repeat(auto-fit, 5rem);
+  grid-gap: 1rem;
+}
+
+.chart-container {
+  grid-area: graph;
+}
+
+.estimation-numbers {
+  grid-area: estimation;
+}
+
+.user-controls {
+  grid-area: controls;
+}
+
+@media(min-width: 768px) {
+  .header {
+    grid-template-columns: 1fr 1fr;
+  }
+  
+  .admin_controls {
+    grid-template-columns: 1fr 1fr;
+
+    section {
+      grid-column: 1 / 3;
+    }
+  }
+}
+</style>
