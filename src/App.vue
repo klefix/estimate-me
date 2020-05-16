@@ -64,6 +64,8 @@ export default {
   color: var(--GLOBAL_TEXT_COLOR);
   font-family: var(--GLOBAL_FONT);
   font-weight: 400;
+  width: 100vw;
+  overflow-x: hidden;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-align: var(--GLOBAL_TEXT_ALIGN);
@@ -103,12 +105,12 @@ main.settingsOpen {
 .settingsArea {
   position: absolute;
   transition: transform 300ms ease-in;
-  top: -2rem;
+  top: 0;
   right: 0;
   z-index: -1;
   height: 100vh;
   width: 100vw;
-  padding: 4rem 1rem 1rem;
+  padding: 2rem 1rem 1rem;
   transform: translate(100vw, 0);
   background: var(--GLOBAL_BACKGROUND_ACCENT);
 }
