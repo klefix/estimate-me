@@ -19,7 +19,7 @@ input {
   font-weight: var(--inputFontWeight, 400);
   text-align: var(--inputTextAlign, left);
   color: var(--inputColor, var(--GLOBAL_TEXT_COLOR));
-
+  background: var(--inputBackground, var(--GLOBAL_BACKGROUND));
   border: var(--inputBorder, var(--GLOBAL_BORDER_DEFAULT));
   border-radius: var(--inputBorderRadius, var(--GLOBAL_BORDER_RADIUS_DEFAULT));
   box-shadow: var(--inputBoxShadow, var(--boxShadow200));
@@ -29,6 +29,10 @@ input:focus {
   border: var(--inputBorderActive, var(--GLOBAL_BORDER_ACTIVE));
   color: var(--inputColorActive, var(--GLOBAL_ACCENT_COLOR));
   outline: 0;
+}
+
+input::placeholder {
+  color: var(--inputColor, var(--GLOBAL_TEXT_COLOR));
 }
 
 button.number {

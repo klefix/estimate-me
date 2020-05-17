@@ -33,6 +33,7 @@ export default {
 .settings {
   padding: 3rem 0.5rem;
   text-align: left;
+  color: var(--GLOBAL_TEXT_COLOR);
 }
 
 fieldset {

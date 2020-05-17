@@ -45,7 +45,7 @@ export default {
   align-self: center;
   padding: 2rem 1rem;
   border-radius: var(--GLOBAL_BORDER_RADIUS_DEFAULT);
-  background: var(--estimationBackground, var(--GLOBAL_BACKGROUND_ACCENT));
+  background: var(--estimationBackground, var(--GLOBAL_BACKGROUND_ACCENT_LIGHT));
   box-shadow: var(--estimationSectionBoxShadow, none);
 }
 .numbers_wrapper h3 {

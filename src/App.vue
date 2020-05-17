@@ -1,6 +1,6 @@
 <template>
   <div id="app" :class="theme">
-    <header>
+    <header class="header">
       <h1>Estimate-Me!</h1>
       <h2 v-if="isRoom">{{roomName}}</h2>
       <BaseButton class="settingsButton" variant="text" @click="toggleSettings">Settings</BaseButton>
@@ -71,7 +71,7 @@ export default {
   text-align: var(--GLOBAL_TEXT_ALIGN);
 }
 
-header {
+.header {
   position: sticky;
   top: 0;
   width: 100vw;
@@ -79,18 +79,16 @@ header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  background: var(--GLOBAL_PRIMARY_COLOR_LIGHT);
+  background: var(--headerBackground, var(--GLOBAL_PRIMARY_COLOR_LIGHT));
+  color: var(--headerTextColor, var(--GLOBAL_TEXT_COLOR));
   z-index: 42;
 }
 
-header h1 {
-  color: var(--GLOBAL_PRIMARY_COLOR_DARK);
-}
-
-header h1,
-header h2 {
+.header h1,
+.header h2 {
   margin: 0;
   font-size: 1.25rem;
+  color: var(--headerTextColor, var(--GLOBAL_TEXT_COLOR));
 }
 
 main {
@@ -113,6 +111,7 @@ main.settingsOpen {
   padding: 2rem 1rem 1rem;
   transform: translate(100vw, 0);
   background: var(--GLOBAL_BACKGROUND_ACCENT);
+  box-shadow: inset 2px 0 6px 0 rgba(0,0,0,0.2), inset 8px 0 16px 0 rgba(0,0,0,0.2);
 }
 
 .settingsArea.settingsOpen  {
@@ -132,23 +131,24 @@ main.settingsOpen {
 /* THEMES */
 
 .cpt-obvious {
-  --GLOBAL_TEXT_COLOR: #40514e;
-  --GLOBAL_TEXT_COLOR_LIGHT: fuchsia;
-  --GLOBAL_TEXT_COLOR_LIGHTEST: #8b9b98;
+  --GLOBAL_TEXT_COLOR: #102A43;
+  --GLOBAL_TEXT_COLOR_LIGHT: #627D98;
+  --GLOBAL_TEXT_COLOR_LIGHTEST: #9FB3C8;
   --GLOBAL_TEXT_COLOR_WHITE: white;
   --GLOBAL_BACKGROUND: white;
-  --GLOBAL_BACKGROUND_ACCENT: #eff2f1;
-  --GLOBAL_BACKGROUND_ACCENT: #dee4e3;
+  --GLOBAL_BACKGROUND_ACCENT_DARK: #9FB3C8;
+  --GLOBAL_BACKGROUND_ACCENT: #D9E2EC;
+  --GLOBAL_BACKGROUND_ACCENT_LIGHT: #F0F4F8;
   --GLOBAL_FONT: 'Avenir', 'Roboto', Helvetica, Arial, sans-serif;
   --GLOBAL_TEXT_ALIGN: left;
-  --GLOBAL_PRIMARY_COLOR_LIGHT: #8df8ea;
-  --GLOBAL_PRIMARY_COLOR: #30e3ca;
-  --GLOBAL_PRIMARY_COLOR_DARK: #11999e;
-  --GLOBAL_SECONDARY_COLOR: orange;
-  --GLOBAL_SECONDARY_COLOR_DARK: darkorange;
-  --GLOBAL_SUCCESS_COLOR: #30e3ca;
-  --GLOBAL_DANGER_COLOR: tomato;
-  --GLOBAL_DANGER_COLOR_DARK: red;
+  --GLOBAL_PRIMARY_COLOR_LIGHT: #62B0E8;
+  --GLOBAL_PRIMARY_COLOR: #2680C2;
+  --GLOBAL_PRIMARY_COLOR_DARK: #0F609B;
+  --GLOBAL_SECONDARY_COLOR: #17B897;
+  --GLOBAL_SECONDARY_COLOR_DARK: #048271;
+  --GLOBAL_SUCCESS_COLOR: #2DCCA7;
+  --GLOBAL_DANGER_COLOR: #D64545;
+  --GLOBAL_DANGER_COLOR_DARK: #A61B1B;
   --GLOBAL_BORDER_DEFAULT: 1px solid var(--GLOBAL_TEXT_COLOR);
   --GLOBAL_BORDER_ACTIVE: 1px solid var(--GLOBAL_ACCENT_COLOR);
   --GLOBAL_BORDER_RADIUS_DEFAULT: 4px;
@@ -158,6 +158,30 @@ main.settingsOpen {
   --buttonPadding: 8px 16px;
   --buttonColorActive: var(--GLOBAL_TEXT_COLOR_WHITE);
   --inputColorActive: var(--GLOBAL_TEXT_COLOR);
+  --headerTextColor: var(--GLOBAL_TEXT_COLOR_WHITE);
+}
+
+@media(prefers-color-scheme: dark) {
+  .cpt-obvious {
+    --GLOBAL_TEXT_COLOR: #F0F4F8;
+    --GLOBAL_TEXT_COLOR_LIGHT: #BCCCDC;
+    --GLOBAL_TEXT_COLOR_LIGHTEST: #9FB3C8;
+    --GLOBAL_TEXT_COLOR_WHITE: #102A43;
+    --GLOBAL_BACKGROUND: #102A43;
+    --GLOBAL_BACKGROUND_ACCENT_DARK: #486581;
+    --GLOBAL_BACKGROUND_ACCENT: #486581;
+    --GLOBAL_BACKGROUND_ACCENT_LIGHT: #334E68;
+    --GLOBAL_PRIMARY_COLOR_LIGHT: #62B0E8;
+    --GLOBAL_PRIMARY_COLOR: #2680C2;
+    --GLOBAL_PRIMARY_COLOR_DARK: #0F609B;
+    --GLOBAL_SECONDARY_COLOR: #17B897;
+    --GLOBAL_SECONDARY_COLOR_DARK: #048271;
+    --GLOBAL_SUCCESS_COLOR: #2DCCA7;
+    --GLOBAL_DANGER_COLOR: #D64545;
+    --GLOBAL_DANGER_COLOR_DARK: #A61B1B;
+    --headerBackground: var(--GLOBAL_PRIMARY_COLOR_DARK);
+    --inputBackground: var(--GLOBAL_BACKGROUND_ACCENT_LIGHT);
+  }
 }
 
 .neumorpheus {
