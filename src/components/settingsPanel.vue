@@ -25,6 +25,11 @@ export default {
     saveSettings() {
       console.log(this.settings)
     }
+  },
+  mounted() {
+    if (localStorage.getItem('estimateMeTheme')) {
+      this.settings.theme = localStorage.getItem('estimateMeTheme')
+    }
   }
 }
 </script>

@@ -36,12 +36,20 @@ export default {
     }
   },
 
+  watch: {
+    theme: {
+      handler() {
+        console.log('theme changed!', this.theme);
+        localStorage.setItem('estimateMeTheme',this.theme);
+      },
+    }
+  },
+
   computed: {
     isRoom() {
       return this.$route.name === 'room'
     },
     roomName() {
-      console.log(this.$route);
       return this.isRoom ? this.$route.params.roomName : null
     },
   },
@@ -53,7 +61,13 @@ export default {
     setTheme(value) {
       this.theme = value
     }
-  }
+  },
+
+  mounted() {
+    if (localStorage.getItem('estimateMeTheme')) {
+      this.theme = localStorage.getItem('estimateMeTheme')
+    }
+  },
 }
 </script>
 

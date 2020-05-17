@@ -54,7 +54,7 @@ export default {
 
 .numbers {
   display: grid;
-  grid-template-columns: repeat(auto-fill, 4rem);
+  grid-template-columns: repeat(auto-fill, 3rem);
   grid-gap: 1rem;
   margin: 1rem 0;
 }
