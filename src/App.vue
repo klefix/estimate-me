@@ -39,7 +39,6 @@ export default {
   watch: {
     theme: {
       handler() {
-        console.log('theme changed!', this.theme);
         localStorage.setItem('estimateMeTheme',this.theme);
       },
     }
