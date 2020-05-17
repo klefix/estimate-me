@@ -200,7 +200,6 @@ main.settingsOpen {
 
 .neumorpheus {
   --GLOBAL_TEXT_COLOR: #2c3e50;
-  --GLOBAL_TEXT_COLOR: #2c3e50;
   --GLOBAL_TEXT_COLOR_LIGHT: #aaaaaa;
   --GLOBAL_TEXT_COLOR_LIGHTEST: #999999;
   --GLOBAL_TEXT_COLOR_WHITE: white;
@@ -232,6 +231,33 @@ main.settingsOpen {
 
   --estimationSectionBoxShadow: var(--boxShadow400);
   --estimationBackground: var(--GLOBAL_BACKGROUND);
+}
+
+.c64 {
+  --GLOBAL_TEXT_COLOR: rgb(166,167,253);
+  --GLOBAL_TEXT_COLOR_LIGHT: rgb(166,167,253);
+  --GLOBAL_TEXT_COLOR_LIGHTEST: rgb(166,167,253);
+  --GLOBAL_TEXT_COLOR_WHITE: white;
+  --GLOBAL_BACKGROUND: rgb(68,74,227);
+  --GLOBAL_BACKGROUND_ACCENT: rgb(78, 83, 228);
+  --GLOBAL_BACKGROUND_ACCENT_LIGHT: rgb(94, 98, 230);
+  --GLOBAL_PRIMARY_COLOR_LIGHT: rgb(166,167,253);
+  --GLOBAL_PRIMARY_COLOR: rgb(166,167,253);
+  --GLOBAL_PRIMARY_COLOR_DARK: rgb(166,167,253);
+  --GLOBAL_SECONDARY_COLOR: rgb(166,167,253);
+  --GLOBAL_SECONDARY_COLOR_DARK: rgb(166,167,253);
+  --GLOBAL_SUCCESS_COLOR: rgb(166,167,253);
+  --GLOBAL_DANGER_COLOR: rgb(166,167,253);
+  --GLOBAL_DANGER_COLOR_DARK: rgb(166,167,253);
+  --GLOBAL_BORDER_RADIUS_DEFAULT: 1px;
+  --GLOBAL_BORDER_DEFAULT: 4px solid rgb(166,167,253);
+  --GLOBAL_FONT: 'Courier New', 'Menlo', Helvetica, Arial, sans-serif;
+  --GLOBAL_TEXT_ALIGN: left;
+  --GLOBAL_ACCENT_COLOR: white;
+  --GLOBAL_ACCENT_COLOR_DARK: white;
+  --headerBackground: var(--GLOBAL_BACKGROUND_ACCENT);
+  --headerTextColor: white;
+  --textButtonColor: white;
 }
 
 </style>

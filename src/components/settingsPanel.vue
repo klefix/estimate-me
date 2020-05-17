@@ -4,8 +4,13 @@
       <fieldset>
         <legend>Theme</legend>
         <select v-model="settings.theme" @change="$emit('theme-change', settings.theme)">
-          <option value="cpt-obvious">Cpt. Obvious</option>
-          <option value="neumorpheus">Neumorpheus</option>
+          <option
+            v-for="theme in availableThemes"
+            :key="theme.value"
+            :value="theme.value"
+          >
+            {{ theme.name }}
+          </option>
         </select>
       </fieldset>
     </form>
@@ -18,7 +23,21 @@ export default {
     return {
       settings: {
         theme: 'cpt-obvious',
-      }
+      },
+      availableThemes: [
+        {
+          value: 'cpt-obvious',
+          name: 'Cpt. Obvious'
+        },
+        {
+          value: 'neumorpheus',
+          name: 'NeuMorpheus'
+        },
+        {
+          value: 'c64',
+          name: 'C64'
+        }
+      ]
     }
   },
   methods: {

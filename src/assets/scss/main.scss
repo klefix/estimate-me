@@ -15,6 +15,7 @@ input {
   color: var(--GLOBAL_TEXT_COLOR_LIGHTEST);
   min-height: 2.5rem;
   font-size: 1rem;
+  font-family: inherit;
   padding: var(--inputPadding, 10px);
   font-weight: var(--inputFontWeight, 400);
   text-align: var(--inputTextAlign, left);

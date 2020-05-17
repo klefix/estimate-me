@@ -47,6 +47,7 @@ export default {
   border-radius: var(--buttonBorderRadius, var(--GLOBAL_BORDER_RADIUS_DEFAULT));
   color: var(--buttonColor, var(--GLOBAL_TEXT_COLOR_WHITE));
   font-size: 1rem;
+  font-family: inherit;
   font-weight: 700;
   padding: var(--buttonPadding, 10px);
   box-shadow: var(--buttonBoxShadow, var(--boxShadow400));
