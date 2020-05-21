@@ -6,7 +6,7 @@
 yarn install
 ```
 
-Then rename `.env.example` to `.env` to make the environment config available for server and client.
+Then copy `.env.example` to `.env` to make the environment config available for server and client.
 
 ### Compiles and hot-reloads for development
 
