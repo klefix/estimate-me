@@ -11,18 +11,17 @@ import Room from './views/room.vue'
 import '@fortawesome/fontawesome-free/css/all.css'
 import './assets/scss/main.scss'
 
-
-const { VUE_APP_SERVER_URI } = process.env;
+const { VUE_APP_SERVER_URI } = process.env
 
 export const SocketInstance = socketClient(VUE_APP_SERVER_URI)
 
 const routes = [
-  { path: '/', component: Intro },
-  { path: '/:roomName', component: Room }
+  { path: '/', name: 'index', component: Intro },
+  { path: '/:roomName', name: 'room', component: Room },
 ]
 
 const router = new VueRouter({
-  routes // short for `routes: routes`
+  routes, // short for `routes: routes`
 })
 
 Vue.use(VueRouter)
@@ -32,5 +31,5 @@ Vue.config.productionTip = false
 
 new Vue({
   router,
-  render: h => h(App),
+  render: (h) => h(App),
 }).$mount('#app')
