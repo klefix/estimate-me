@@ -78,7 +78,7 @@ export default {
       roomId: undefined,
       isConnected: false,
       users: [],
-      numbers: [1, 2, 3, 5, 8, 13, 21, '?'],
+      numbers: ['1', '2', '3', '5', '8', '13', '21', '?'],
       name: '',
       estimation: null,
       options: {
@@ -277,7 +277,7 @@ export default {
   .header {
     grid-template-columns: 1fr 1fr;
   }
-  
+
   .admin_controls {
     grid-template-columns: 1fr 1fr;
 

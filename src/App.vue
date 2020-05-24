@@ -162,6 +162,7 @@ main.settingsOpen {
   --GLOBAL_SUCCESS_COLOR: #2DCCA7;
   --GLOBAL_DANGER_COLOR: #D64545;
   --GLOBAL_DANGER_COLOR_DARK: #A61B1B;
+  --GLOBAL_GRID_LINE_COLOR: var(--GLOBAL_TEXT_COLOR_LIGHT);
   --GLOBAL_BORDER_DEFAULT: 1px solid var(--GLOBAL_TEXT_COLOR);
   --GLOBAL_BORDER_ACTIVE: 1px solid var(--GLOBAL_ACCENT_COLOR);
   --GLOBAL_BORDER_RADIUS_DEFAULT: 4px;
@@ -209,6 +210,7 @@ main.settingsOpen {
   --GLOBAL_TEXT_ALIGN: center;
   --GLOBAL_ACCENT_COLOR: #4b98bf;
   --GLOBAL_ACCENT_COLOR_DARK: #5ab9ea;
+  --GLOBAL_GRID_LINE_COLOR: var(--GLOBAL_TEXT_COLOR_LIGHT);
 
   --boxShadow200: inset 6px 6px 10px 0 rgba(0, 0, 0, 0.2),
     inset -6px -6px 10px 0 rgba(255, 255, 255, 0.5);
@@ -248,6 +250,7 @@ main.settingsOpen {
   --GLOBAL_SUCCESS_COLOR: rgb(166,167,253);
   --GLOBAL_DANGER_COLOR: rgb(166,167,253);
   --GLOBAL_DANGER_COLOR_DARK: rgb(166,167,253);
+  --GLOBAL_GRID_LINE_COLOR: var(--GLOBAL_TEXT_COLOR);
   --GLOBAL_BORDER_RADIUS_DEFAULT: 1px;
   --GLOBAL_BORDER_DEFAULT: 4px solid rgb(166,167,253);
   --GLOBAL_FONT: 'Courier New', 'Menlo', Helvetica, Arial, sans-serif;

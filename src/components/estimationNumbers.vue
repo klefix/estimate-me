@@ -28,7 +28,7 @@ export default {
       required: true,
     },
     estimation: {
-      type: Number,
+      type: String,
       default: null,
     },
   },
