@@ -1,16 +1,36 @@
-const app = require('express')()
-const http = require('http').createServer(app)
-const io = require('socket.io')(http)
-
 const dotenv = require('dotenv-flow')
 dotenv.config()
+
+const { NODEJS_SERVER_PORT, ENABLE_SSL } = process.env
+
+import express from 'express'
+import fs from 'fs'
+import http from 'http'
+import https from 'https'
+
+const app = express()
+
+let server
+if (ENABLE_SSL) {
+  const { SSL_KEY_PATH, SSL_CERT_PATH } = process.env
+  server = https.createServer({
+    key: fs.readFileSync(SSL_KEY_PATH),
+    cert: fs.readFileSync(SSL_CERT_PATH)
+  },app)
+} else {
+  server = http.createServer(app)
+}
+
+server.listen(NODEJS_SERVER_PORT, function() {
+  console.log(`listening on *:${NODEJS_SERVER_PORT}`)
+})
+
+const io = require('socket.io')(server)
 
 import { rooms, findOrCreateRoom, numClientsInRoom } from './rooms'
 import { createUser, isAdmin, users, ROLE_ADMIN } from './users'
 
 import { log, renderEstimation } from './utils'
-
-const { NODEJS_SERVER_PORT } = process.env
 
 io.on('connection', function(socket) {
   log(`user ${socket.id} connected`)
@@ -128,8 +148,4 @@ io.on('connection', function(socket) {
       updateUserList()
     }
   })
-})
-
-http.listen(NODEJS_SERVER_PORT, function() {
-  console.log(`listening on *:${NODEJS_SERVER_PORT}`)
 })
