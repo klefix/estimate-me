@@ -3,7 +3,7 @@
     <div class="role-icon">
       <i v-if="isAdmin(user)" class="fas fa-crown"></i>
       <i
-        v-if="isAdmin(user) && user !== currentUser"
+        v-if="isAdmin(currentUser) && user.id !== currentUser.id"
         class="fas fa-crown shadow"
         @click="grantAdmin(user)"
       ></i>
@@ -85,6 +85,7 @@ export default {
   font-size: 1rem;
   line-height: 1.2;
   margin: 0;
+  min-height: 1.2rem;
 }
 
 .estimation {

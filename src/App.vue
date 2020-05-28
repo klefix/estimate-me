@@ -211,6 +211,8 @@ main.settingsOpen {
   --GLOBAL_ACCENT_COLOR: #4b98bf;
   --GLOBAL_ACCENT_COLOR_DARK: #5ab9ea;
   --GLOBAL_GRID_LINE_COLOR: var(--GLOBAL_TEXT_COLOR_LIGHT);
+  --GLOBAL_DANGER_COLOR: #D64545;
+  --GLOBAL_DANGER_COLOR_DARK: #A61B1B;
 
   --boxShadow200: inset 6px 6px 10px 0 rgba(0, 0, 0, 0.2),
     inset -6px -6px 10px 0 rgba(255, 255, 255, 0.5);
@@ -232,6 +234,7 @@ main.settingsOpen {
 
   --estimationSectionBoxShadow: var(--boxShadow400);
   --estimationBackground: var(--GLOBAL_BACKGROUND);
+
 }
 
 .c64 {

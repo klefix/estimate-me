@@ -60,3 +60,28 @@ button.remove {
 .chart-container {
   max-width: 300px;
 }
+
+/** overrides for neumorpheus theme */
+#app.neumorpheus {
+  .button:hover,
+  button:hover {
+    color: #5ab9ea;
+  }
+
+  input:focus,
+  .button:focus {
+    border: none;
+    outline: none;
+  }
+  .button:active,
+  .button.active {
+    color: #4b98bf;
+
+    box-shadow: inset 6px 6px 10px 0 rgba(0, 0, 0, 0.2),
+    inset -6px -6px 10px 0 rgba(255, 255, 255, 0.5);
+  }
+
+  .danger {
+    color: #fff;
+  }
+}
