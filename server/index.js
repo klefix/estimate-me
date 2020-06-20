@@ -49,11 +49,21 @@ io.on('connection', function(socket) {
     emitToRoom('userList', maskEstimations(roomUsers()))
   }
 
+  const areEstimationsComplete = () => roomUsers().every(
+    user => user.estimation !== null
+  )
+
   const maskEstimations = users =>
     users.map(user => ({
       ...user,
       estimation: renderEstimation(user, currentRoom),
     }))
+
+  const revealEstimations = () => {
+    currentRoom.estimationsVisible = true
+    rooms.update(currentRoom)
+    updateUserList()
+  }
 
   socket.on('joinRoom', function(roomName) {
     log(`User ${socket.id} joined room ${roomName}`)
@@ -78,6 +88,10 @@ io.on('connection', function(socket) {
     users.update(currentUser)
 
     updateUserList()
+
+    if(areEstimationsComplete()) {
+      revealEstimations()
+    }
   })
 
   socket.on('setName', function(value) {
@@ -127,9 +141,7 @@ io.on('connection', function(socket) {
       return
     }
 
-    currentRoom.estimationsVisible = true
-    rooms.update(currentRoom)
-    updateUserList()
+    revealEstimations()
   })
 
   socket.on('grantAdmin', function(userId) {
