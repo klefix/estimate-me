@@ -7,25 +7,7 @@
       Joining room...
     </div>
     <div :class="['ui_grid', currentUserIsAdmin && 'ui_grid--admin' ]" v-else>
-      <div v-if="currentUserIsAdmin" class="admin_controls">
-        <section>
-          <p>You are the admin of this room!</p>
-          <p>
-            To make someone else admin, move the cursor above their head and
-            click the appearing crown icon.
-          </p>
-        </section>
-        <div>
-          <BaseButton variant="danger" @click="clearEstimations()">
-            Clear Estimations
-          </BaseButton>
-        </div>
-        <div>
-          <BaseButton variant="primary" @click="revealEstimations()">
-            Reveal Estimations
-          </BaseButton>
-        </div>
-      </div>
+      <AdminControls v-if="currentUserIsAdmin" />
       <div class="chart-container">
         <estimation-chart :chart-data="chartData" />
       </div>
@@ -39,9 +21,9 @@
         />
       </div>
 
-      <EstimationNumbers
-        class="estimation-numbers"
-        :numbers="numbers"
+      <EstimationValues
+        class="estimation-values"
+        :values="estimationValues"
         :estimation="estimation"
         @estimated="
           (value) => {
@@ -56,18 +38,18 @@
 </template>
 
 <script>
-import BaseButton from '../components/baseButton.vue'
+import AdminControls from '../components/adminControls.vue'
 import EstimationChart from '../components/estimationChart.vue'
-import EstimationNumbers from '../components/estimationNumbers.vue'
+import EstimationValues from '../components/estimationValues.vue'
 import UserCard from '../components/userCard.vue'
 import UserControls from '../components/userControls.vue'
 let reconnectionInterval = undefined
 
 export default {
   components: {
-    BaseButton,
+    AdminControls,
     EstimationChart,
-    EstimationNumbers,
+    EstimationValues,
     UserCard,
     UserControls,
   },
@@ -78,9 +60,9 @@ export default {
       roomId: undefined,
       isConnected: false,
       users: [],
-      numbers: ['1', '2', '3', '5', '8', '13', '21', '?'],
       name: '',
       estimation: null,
+      estimationValues: ['1', '2', '3', '5', '8', '13', '21', '?'],
       options: {
         responsive: true,
         maintainAspectRatio: false,
@@ -92,7 +74,7 @@ export default {
   computed: {
     chartData: function () {
       return {
-        labels: this.numbers,
+        labels: this.estimationValues,
         datasets: [
           {
             label: 'Estimations',
@@ -107,8 +89,8 @@ export default {
         return []
       }
       const intArr = Object.values(this.users).map((user) => user.estimation)
-      return this.numbers.map(
-        (fibNum) => intArr.filter((x) => x === fibNum).length || null
+      return this.estimationValues.map(
+        (value) => intArr.filter((x) => x === value).length || null
       )
     },
 
@@ -156,6 +138,14 @@ export default {
     estimationsCleared() {
       this.estimation = null
     },
+
+    estimationValuesUpdated(values) {
+      console.info('estimationValuesUpdated', values)
+      if (!values) {
+        return
+      }
+      this.estimationValues = values.split(',')
+    }
   },
 
   methods: {
@@ -183,17 +173,10 @@ export default {
       this.estimation = value
       this.$socket.client.emit('setEstimation', value)
     },
-
-    clearEstimations() {
-      this.$socket.client.emit('clearEstimations')
-    },
-
-    revealEstimations() {
-      this.$socket.client.emit('revealEstimations')
-    },
   },
 }
 </script>
+
 <style lang="scss" scoped>
 .grid {
   position: relative;
@@ -265,7 +248,7 @@ export default {
   grid-area: graph;
 }
 
-.estimation-numbers {
+.estimation-values {
   grid-area: estimation;
 }
 

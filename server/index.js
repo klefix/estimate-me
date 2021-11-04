@@ -77,6 +77,9 @@ io.on('connection', function(socket) {
       currentUser.roles.push(ROLE_ADMIN)
     }
     socket.emit('joinedRoom', room.$loki)
+    if (room.estimationValues) {
+      socket.emit('estimationValuesUpdated', room.estimationValues)
+    }
 
     emitToRoom('userList', maskEstimations(roomUsers()))
   })
@@ -119,6 +122,18 @@ io.on('connection', function(socket) {
     }
 
     updateUserList()
+  })
+
+  socket.on('setEstimationValues', function(values) {
+    if (!isAdmin(currentUser)) {
+      return
+    }
+
+    currentRoom.estimationValues = values
+    rooms.update(currentRoom)
+    updateUserList()
+    emitToRoom('estimationValuesUpdated', values)
+    log('admin set estimationValues', values)
   })
 
   socket.on('clearEstimations', function() {
