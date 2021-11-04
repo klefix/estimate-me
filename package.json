@@ -21,9 +21,7 @@
     "esm": "^3.2.25",
     "express": "^4.17.1",
     "lokijs": "^1.5.8",
-    "node-sass": "^4.13.1",
     "prettier": "^1.19.1",
-    "sass-loader": "^8.0.2",
     "socket.io": "^2.3.0",
     "socket.io-client": "^2.3.0",
     "vue": "^2.6.11",
@@ -38,7 +36,9 @@
     "babel-eslint": "^10.0.3",
     "eslint": "^6.7.2",
     "eslint-plugin-vue": "^6.1.2",
+    "node-sass": "6.0.1",
     "nodemon": "^2.0.2",
+    "sass-loader": "^10.0.5",
     "vue-template-compiler": "^2.6.11"
   },
   "eslintConfig": {
