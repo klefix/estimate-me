@@ -16,6 +16,7 @@
     </div>
   </div>
 </template>
+
 <script>
 import BaseButton from '../components/baseButton.vue'
 
@@ -29,11 +30,22 @@ export default {
       name: '',
     }
   },
+  mounted() {
+    if (localStorage) {
+      this.name = localStorage.getItem('name')
+      this.broadcastName()
+    }
+  },
   methods: {
     setName() {
-      if (this.name) {
-        this.$socket.client.emit('setName', this.name)
+      if (localStorage) {
+        localStorage.setItem('name', this.name)
       }
+      this.broadcastName()
+    },
+
+    broadcastName() {
+      this.$socket.client.emit('setName', this.name)
     },
 
     disconnect() {
