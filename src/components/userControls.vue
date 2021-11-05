@@ -13,6 +13,7 @@
     <div class="options">
       <BaseButton variant="text" @click="disconnect">Reconnect</BaseButton>
       <BaseButton variant="danger" to="/">Leave</BaseButton>
+      <BaseButton variant="secondary" @click="copyLink">{{ justCopied ? 'Copied!' : 'Copy Link' }}</BaseButton>
     </div>
   </div>
 </template>
@@ -27,6 +28,8 @@ export default {
   data() {
     return {
       name: '',
+      timeoutId: undefined,
+      justCopied: false,
     }
   },
   methods: {
@@ -38,6 +41,15 @@ export default {
 
     disconnect() {
       this.$socket.client.disconnect()
+    },
+
+    async copyLink() {
+      await navigator.clipboard.writeText(location.href)
+      if (this.timeoutId) clearTimeout(this.timeoutId)
+      this.justCopied = true
+      this.timeoutId = setTimeout(() => {
+        this.justCopied = false
+      }, 2500)
     },
   },
 }
