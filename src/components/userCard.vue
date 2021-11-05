@@ -175,7 +175,8 @@ export default {
   width: 11.7rem;
   height: 10rem;
   background-color: var(--GLOBAL_BACKGROUND_ACCENT, #aaa);
-  overflow: scroll;
+  overflow-x: hidden;
+  overflow-y: scroll;
   padding: 0.3rem 0.6rem 0.6rem;
 }
 
