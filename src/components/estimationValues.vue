@@ -18,7 +18,7 @@
 <script>
 import BaseButton from './baseButton.vue'
 export default {
-  name: 'EstimationNumbers',
+  name: 'EstimationValues',
   components: {
     BaseButton,
   },
