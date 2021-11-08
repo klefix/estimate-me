@@ -11,9 +11,9 @@ export const findOrCreateRoom = roomName => {
 }
 
 export const numClientsInRoom = (io, roomId) => {
-  const room = io.sockets.adapter.rooms[roomId]
+  const room = io.sockets.adapter.rooms.get(roomId)
   if (!room) {
     return -1
   }
-  return room.length
+  return room.size
 }

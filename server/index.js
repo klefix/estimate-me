@@ -1,7 +1,7 @@
 const dotenv = require('dotenv-flow')
 dotenv.config()
 
-const { NODEJS_SERVER_PORT, ENABLE_SSL } = process.env
+const { NODEJS_SERVER_PORT, ENABLE_SSL, CORS_ORIGIN } = process.env
 
 import express from 'express'
 import fs from 'fs'
@@ -28,7 +28,13 @@ server.listen(NODEJS_SERVER_PORT, function() {
   console.log(`listening on *:${NODEJS_SERVER_PORT}`)
 })
 
-const io = require('socket.io')(server)
+const io = require('socket.io')(server, {
+  cors: {
+    origin: CORS_ORIGIN,
+    methods: ['GET', 'POST'],
+    credentials: true,
+  },
+})
 
 import { rooms, findOrCreateRoom, numClientsInRoom } from './rooms'
 import { createUser, isAdmin, users, ROLE_ADMIN } from './users'
@@ -74,7 +80,9 @@ io.on('connection', function(socket) {
     currentRoom = room
     currentUser.room = room.$loki
 
+    console.log({room})
     socket.join(room.$loki)
+    console.log({numClients: numClientsInRoom(io, room.$loki)})
     if (numClientsInRoom(io, room.$loki) === 1) {
       currentUser.roles.push(ROLE_ADMIN)
     }
