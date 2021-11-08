@@ -9234,6 +9234,11 @@ vue-chartjs@^3.5.0:
   dependencies:
     "@types/chart.js" "^2.7.55"
 
+vue-emoji-picker@^1.0.3:
+  version "1.0.3"
+  resolved "https://registry.yarnpkg.com/vue-emoji-picker/-/vue-emoji-picker-1.0.3.tgz#168604163e41b3a2a0f9e9a21bb595fd8bac05e4"
+  integrity sha512-t1UyrvPHKgWzj8maqNvMIHfY4B2Hn+filKTiy4ik+xweF0gKMx1r9C0YDg1zgaYnB6PBjctHwr9vwkipb4lUaw==
+
 vue-eslint-parser@^7.0.0:
   version "7.11.0"
   resolved "https://registry.yarnpkg.com/vue-eslint-parser/-/vue-eslint-parser-7.11.0.tgz#214b5dea961007fcffb2ee65b8912307628d0daf"
