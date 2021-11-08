@@ -60,9 +60,8 @@ io.on('connection', function(socket) {
     emitToRoom('userList', maskEstimations(roomUsers()))
   }
 
-  const areEstimationsComplete = () => roomUsers().every(
-    user => user.estimation !== null
-  )
+  const areEstimationsComplete = () =>
+    roomUsers().every(user => user.estimation !== null)
 
   const maskEstimations = (users: User[]) =>
     users.map(user => ({
@@ -106,7 +105,7 @@ io.on('connection', function(socket) {
 
     updateUserList()
 
-    if(areEstimationsComplete()) {
+    if (areEstimationsComplete()) {
       revealEstimations()
     }
   })
@@ -116,6 +115,15 @@ io.on('connection', function(socket) {
     log(`user ${socket.id} set their name to ${value}`)
 
     currentUser.name = value
+    users.update(currentUser)
+
+    updateUserList()
+  })
+
+  socket.on('setIcon', function(value) {
+    log(`user ${socket.id} set their icon to ${value}`)
+
+    currentUser.icon = value
     users.update(currentUser)
 
     updateUserList()
@@ -141,6 +149,18 @@ io.on('connection', function(socket) {
     }
 
     updateUserList()
+  })
+
+  socket.on('setEstimationValues', function(values) {
+    if (!isAdmin(currentUser) || !currentRoom) {
+      return
+    }
+    
+    currentRoom.estimationValues = values
+    rooms.update(currentRoom)
+    updateUserList()
+    emitToRoom('estimationValuesUpdated', values)
+    log('admin set estimationValues', values)
   })
 
   socket.on('clearEstimations', function() {

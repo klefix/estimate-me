@@ -7,27 +7,18 @@
       Joining room...
     </div>
     <div :class="['ui_grid', currentUserIsAdmin && 'ui_grid--admin' ]" v-else>
-      <div v-if="currentUserIsAdmin" class="admin_controls">
-        <section>
-          <p>You are the admin of this room!</p>
-          <p>
-            To make someone else admin, move the cursor above their head and
-            click the appearing crown icon.
-          </p>
-        </section>
-        <div>
-          <BaseButton variant="danger" @click="clearEstimations()">
-            Clear Estimations
-          </BaseButton>
-        </div>
-        <div>
-          <BaseButton variant="primary" @click="revealEstimations()">
-            Reveal Estimations
-          </BaseButton>
-        </div>
-      </div>
+      <AdminControls v-if="currentUserIsAdmin" />
       <div class="chart-container">
-        <estimation-chart :chart-data="chartData" />
+        <EstimationChart :chart-data="chartData" @click="highlightUsersByEstimation"/>
+
+        <dl>
+          <dt>Minimum:</dt>
+          <dd>{{ estimations.min }}</dd>
+          <dt>Maximum:</dt>
+          <dd>{{ estimations.max }}</dd>
+          <dt>Most agreed on:</dt>
+          <dd>{{ estimations.mostAgreedOn }}</dd>
+        </dl>
       </div>
 
       <div class="users">
@@ -36,12 +27,13 @@
           :key="user.id"
           :user="user"
           :currentUser="currentUser"
+          :highlight="highlightEstimation === user.estimation"
         />
       </div>
 
-      <EstimationNumbers
-        class="estimation-numbers"
-        :numbers="numbers"
+      <EstimationValues
+        class="estimation-values"
+        :values="estimationValues"
         :estimation="estimation"
         @estimated="
           (value) => {
@@ -57,22 +49,22 @@
 
 <script lang="ts">
 import Vue from 'vue'
-import BaseButton from '../components/baseButton.vue'
+import AdminControls from '../components/adminControls.vue'
 import EstimationChart from '../components/estimationChart.vue'
-import EstimationNumbers from '../components/estimationNumbers.vue'
+import EstimationValues from '../components/estimationValues.vue'
 import UserCard from '../components/userCard.vue'
 import UserControls from '../components/userControls.vue'
 import { Component } from 'vue-property-decorator'
+import { User, Role } from '@estimate-me/api'
+import { findLastIndex } from '../utils/array'
 
 import { Socket } from 'vue-socket.io-extended'
 
-type User = any // TODO replace with actually typed user
-
 @Component({
   components: {
-    BaseButton,
+    AdminControls,
     EstimationChart,
-    EstimationNumbers,
+    EstimationValues,
     UserCard,
     UserControls,
   },
@@ -80,50 +72,60 @@ type User = any // TODO replace with actually typed user
 export default class Room extends Vue {
 
   roomName = this.$route.params.roomName
-  roomId: string | null = null
+  roomId = null
   isConnected = false
-  users: User[] = [] // TODO specific type for user
-  numbers = ['1', '2', '3', '5', '8', '13', '21', '?']
+  users: User[] = []
   name = ''
-  estimation: string | null = null
-  options= {
+  estimation: null | string = null
+  estimationValues = ['1', '2', '3', '5', '8', '13', '21', '?']
+  options = {
     responsive: true,
     maintainAspectRatio: false,
   }
-  reconnectionInterval?: number
+  reconnectionInterval: number | null = null
+  highlightEstimation: string | null = null
 
-  get chartData () {
+  get chartData() {
     return {
-      labels: this.numbers,
+      labels: this.estimationValues,
       datasets: [
         {
           label: 'Estimations',
           backgroundColor: '#f87979',
-          data: this.estimations,
+          data: this.estimations?.values,
         },
       ],
     }
   }
-  
-  get estimations() {
+
+  get estimations () {
     if (!this.users) {
-      return []
+      return null
     }
-    const intArr = Object.values(this.users).map((user) => (user as any).estimation)
-    return this.numbers.map(
-      (fibNum) => intArr.filter((x) => x === fibNum).length || null
+    const intArr = Object.values(this.users).map((user) => user.estimation)
+    const values = this.estimationValues.map(
+      (value) => intArr.filter((x) => x === value).length || null
     )
+    const min = this.estimationValues[values.findIndex(e => e !== null)]
+    const max = this.estimationValues[findLastIndex(values, (e: any) => e !== null)]
+    const mostAgreedOn = this.estimationValues[findLastIndex(values, (e: any) => e === Math.max(...values as any))]
+    return {
+      values,
+      min,
+      max,
+      mostAgreedOn,
+    }
   }
 
   get currentUser() {
     return this.users.find((user) => user.id === this.$socket.client.id)
   }
 
-  get currentUserIsAdmin() {
+  currentUserIsAdmin() {
     if (!this.currentUser) {
       return false
     }
-    return this.currentUser.roles.includes('ADMIN')
+    return this.currentUser.roles.includes(Role.ADMIN)
   }
 
   mounted() {
@@ -147,18 +149,27 @@ export default class Room extends Vue {
   }
 
   @Socket()
-  userList(users: User[]) {
-    this.users = users.sort((a: any, b: any) => (a.$loki > b.$loki) as any)
+  userList(users: any) {
+    this.users = users.sort((a: any, b: any) => a.$loki > b.$loki)
   }
 
   @Socket()
-  joinedRoom(roomId: string) {
+  joinedRoom(roomId: any) {
     this.roomId = roomId
   }
 
   @Socket()
   estimationsCleared() {
     this.estimation = null
+  }
+
+  @Socket()
+  estimationValuesUpdated(values: any) {
+    console.info('estimationValuesUpdated', values)
+    if (!values) {
+      return
+    }
+    this.estimationValues = values.split(',')
   }
 
   reconnect() {
@@ -171,13 +182,11 @@ export default class Room extends Vue {
       this.joinRoom()
     }
   }
-
   joinRoom() {
     console.log('Joining Room...')
     this.$socket.client.emit('joinRoom', this.roomName)
   }
-
-  estimate(value: string | null) {
+  estimate(value: string | null) {
     // allow deselect of number/button
     if (this.estimation === value) {
       value = null
@@ -185,17 +194,17 @@ export default class Room extends Vue {
     this.estimation = value
     this.$socket.client.emit('setEstimation', value)
   }
-
-  clearEstimations() {
-    this.$socket.client.emit('clearEstimations')
-  }
-
-  revealEstimations() {
-    this.$socket.client.emit('revealEstimations')
+  highlightUsersByEstimation(data: any) {
+    if (this.highlightEstimation === data.value) {
+      this.highlightEstimation = null
+    } else {
+      this.highlightEstimation = data.value
+    }
   }
 
 }
 </script>
+
 <style lang="scss" scoped>
 .grid {
   position: relative;
@@ -267,7 +276,7 @@ export default class Room extends Vue {
   grid-area: graph;
 }
 
-.estimation-numbers {
+.estimation-values {
   grid-area: estimation;
 }
 

@@ -44,6 +44,16 @@ export default Vue.extend({
           fontColor: globalGridLineColor,
         }
       },
+      onClick: (e) => {
+        const clickedElement = this.$data._chart.getElementsAtEvent(e)[0]
+
+        if (clickedElement) {
+          this.$emit('click', {
+            id: clickedElement._index,
+            value: this.chartData.labels[clickedElement._index]
+          })
+        }
+      }
     })
   },
 })

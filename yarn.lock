@@ -11470,6 +11470,11 @@ vue-class-component@^7.2.6:
   resolved "https://registry.yarnpkg.com/vue-class-component/-/vue-class-component-7.2.6.tgz#8471e037b8e4762f5a464686e19e5afc708502e4"
   integrity sha512-+eaQXVrAm/LldalI272PpDe3+i4mPis0ORiMYxF6Ae4hyuCh15W8Idet7wPUEs4N4YptgFHGys4UrgNQOMyO6w==
 
+vue-emoji-picker@^1.0.3:
+  version "1.0.3"
+  resolved "https://registry.yarnpkg.com/vue-emoji-picker/-/vue-emoji-picker-1.0.3.tgz#168604163e41b3a2a0f9e9a21bb595fd8bac05e4"
+  integrity sha512-t1UyrvPHKgWzj8maqNvMIHfY4B2Hn+filKTiy4ik+xweF0gKMx1r9C0YDg1zgaYnB6PBjctHwr9vwkipb4lUaw==
+
 vue-hot-reload-api@^2.3.0:
   version "2.3.4"
   resolved "https://registry.yarnpkg.com/vue-hot-reload-api/-/vue-hot-reload-api-2.3.4.tgz#532955cc1eb208a3d990b3a9f9a70574657e08f2"

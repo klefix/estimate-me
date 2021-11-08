@@ -4,7 +4,7 @@ import db from './db'
 export const rooms = db.addCollection<Room>('rooms')
 
 export const findOrCreateRoom = (roomName: string) => {
-  return rooms.findOne({ name: roomName }) ?? rooms.insert({ name: roomName, estimationsVisible: false })!
+  return rooms.findOne({ name: roomName }) ?? rooms.insert({ name: roomName, estimationsVisible: false, estimationValues: [] })!
 }
 
 export const numClientsInRoom = (io: any, roomId: string) => {

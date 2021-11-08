@@ -17,6 +17,7 @@
     </div>
   </div>
 </template>
+
 <script>
 import Vue from 'vue'
 import BaseButton from '../components/baseButton.vue'
@@ -34,11 +35,22 @@ export default class UserControls extends Vue {
   timeoutId = undefined
   justCopied = false
 
+  mounted() {
+    if (localStorage) {
+      this.name = localStorage.getItem('name')
+      this.broadcastName()
+    }
+  }
 
   setName() {
-    if (this.name) {
-      this.$socket.client.emit('setName', this.name)
+    if (localStorage) {
+      localStorage.setItem('name', this.name)
     }
+    this.broadcastName()
+  }
+
+  broadcastName() {
+    this.$socket.client.emit('setName', this.name)
   }
 
   disconnect() {

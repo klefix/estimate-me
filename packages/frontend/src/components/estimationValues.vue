@@ -22,7 +22,7 @@ import BaseButton from './baseButton.vue'
 import { Component, Prop } from 'vue-property-decorator'
 
 @Component({
-  name: 'EstimationValues',
+  name: 'EstimationNumbers',
   components: {
     BaseButton,
   },

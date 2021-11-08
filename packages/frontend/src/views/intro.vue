@@ -9,6 +9,10 @@
         v-on:keydown.enter="btnActive = true"
         v-on:keyup.enter=";(btnActive = false), joinRoom()"
       />
+      &nbsp;
+      <BaseButton @click="randomRoomName">
+        <i class="fas fa-dice-five"></i>
+      </BaseButton>
       <small v-show="invalidRoomName">
         Please enter a valid room name!
       </small>
@@ -30,6 +34,7 @@
 import Vue from 'vue'
 import BaseButton from '../components/baseButton.vue'
 import { Component } from 'vue-property-decorator'
+import { generateName } from "@/utils/randomName";
 
 @Component({
   components: {
@@ -37,10 +42,13 @@ import { Component } from 'vue-property-decorator'
   }
 })
 export default class Intro extends Vue {
-
   roomName = ''
   invalidRoomName = false
   btnActive = false
+
+  randomRoomName() {
+    this.roomName = generateName()
+  }
 
 
   joinRoom() {

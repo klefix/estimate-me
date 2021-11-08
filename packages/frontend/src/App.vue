@@ -1,17 +1,7 @@
 <template>
   <div id="app" :class="theme">
-    <header class="header">
-      <h1>Estimate-Me!</h1>
-      <h2 v-if="isRoom">{{roomName}}</h2>
-      <BaseButton class="settingsButton" variant="text" @click="toggleSettings">Settings</BaseButton>
-      <div :class="['settingsArea', showSettings && 'settingsOpen']">
-        <SettingsPanel
-          v-if="showSettings"
-          @theme-change="setTheme"
-        />
-      </div>
-    </header>
-    <main :class="[showSettings && 'settingsOpen']">
+    <Header :room-name='roomName' @theme-change='setTheme' />
+    <main>
       <router-view></router-view>
     </main>
   </div>
@@ -22,12 +12,14 @@ import Vue from 'vue'
 import BaseButton from './components/baseButton.vue'
 import SettingsPanel from './components/settingsPanel.vue'
 import { Component, Watch } from 'vue-property-decorator'
+import Header from './components/header.vue'
 
 @Component({
   name: 'App',
   components: {
     BaseButton,
     SettingsPanel,
+    Header,
   }
 })
 export default class App extends Vue {
@@ -79,61 +71,9 @@ export default class App extends Vue {
   text-align: var(--GLOBAL_TEXT_ALIGN);
 }
 
-.header {
-  position: sticky;
-  top: 0;
-  width: 100vw;
-  padding: 0.5rem 2rem;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  background: var(--headerBackground, var(--GLOBAL_PRIMARY_COLOR_LIGHT));
-  color: var(--headerTextColor, var(--GLOBAL_TEXT_COLOR));
-  z-index: 42;
-}
-
-.header h1,
-.header h2 {
-  margin: 0;
-  font-size: 1.25rem;
-  color: var(--headerTextColor, var(--GLOBAL_TEXT_COLOR));
-}
-
 main {
   padding: 1rem;
   transition: transform 300ms ease-in;
-}
-
-main.settingsOpen {
-  transform: translate(-100vw, 0);
-}
-
-.settingsArea {
-  position: absolute;
-  transition: transform 300ms ease-in;
-  top: 0;
-  right: 0;
-  z-index: -1;
-  height: 100vh;
-  width: 100vw;
-  padding: 2rem 1rem 1rem;
-  transform: translate(100vw, 0);
-  background: var(--GLOBAL_BACKGROUND_ACCENT);
-  box-shadow: inset 2px 0 6px 0 rgba(0,0,0,0.2), inset 8px 0 16px 0 rgba(0,0,0,0.2);
-}
-
-.settingsArea.settingsOpen  {
-  transform: translateX(0);
-}
-
-@media(min-width: 480px) {
-  main.settingsOpen {
-    transform: translate(-35vw, 0);
-  }
-  .settingsArea {
-    width: 35vw;
-    transform: translate(35vw, 0);
-  }
 }
 
 /* THEMES */
