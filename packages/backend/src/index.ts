@@ -57,7 +57,6 @@ io.on('connection', function(socket) {
   }
 
   const updateUserList = () => {
-    console.log("UPDATE USER LIST")
     emitToRoom('userList', maskEstimations(roomUsers()))
   }
 
