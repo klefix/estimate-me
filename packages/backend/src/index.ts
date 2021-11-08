@@ -182,7 +182,7 @@ io.on('connection', function(socket) {
   })
 
   socket.on('revealEstimations', function() {
-    if (currentUser && !isAdmin(currentUser)) {
+    if (!currentUser || !isAdmin(currentUser)) {
       return
     }
 
