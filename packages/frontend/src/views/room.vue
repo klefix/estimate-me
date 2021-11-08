@@ -121,7 +121,7 @@ export default class Room extends Vue {
     return this.users.find((user) => user.id === this.$socket.client.id)
   }
 
-  currentUserIsAdmin() {
+  get currentUserIsAdmin() {
     if (!this.currentUser) {
       return false
     }
@@ -164,12 +164,12 @@ export default class Room extends Vue {
   }
 
   @Socket()
-  estimationValuesUpdated(values: any) {
+  estimationValuesUpdated(values: string[]) {
     console.info('estimationValuesUpdated', values)
     if (!values) {
       return
     }
-    this.estimationValues = values.split(',')
+    this.estimationValues = values
   }
 
   reconnect() {
