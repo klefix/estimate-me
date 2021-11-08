@@ -13,10 +13,13 @@ const app = express()
 let server
 if (ENABLE_SSL) {
   const { SSL_KEY_PATH, SSL_CERT_PATH } = process.env
-  server = https.createServer({
-    key: fs.readFileSync(SSL_KEY_PATH),
-    cert: fs.readFileSync(SSL_CERT_PATH)
-  },app)
+  server = https.createServer(
+    {
+      key: fs.readFileSync(SSL_KEY_PATH),
+      cert: fs.readFileSync(SSL_CERT_PATH),
+    },
+    app
+  )
 } else {
   server = http.createServer(app)
 }
@@ -49,9 +52,8 @@ io.on('connection', function(socket) {
     emitToRoom('userList', maskEstimations(roomUsers()))
   }
 
-  const areEstimationsComplete = () => roomUsers().every(
-    user => user.estimation !== null
-  )
+  const areEstimationsComplete = () =>
+    roomUsers().every(user => user.estimation !== null)
 
   const maskEstimations = users =>
     users.map(user => ({
@@ -92,7 +94,7 @@ io.on('connection', function(socket) {
 
     updateUserList()
 
-    if(areEstimationsComplete()) {
+    if (areEstimationsComplete()) {
       revealEstimations()
     }
   })
@@ -101,6 +103,15 @@ io.on('connection', function(socket) {
     log(`user ${socket.id} set their name to ${value}`)
 
     currentUser.name = value
+    users.update(currentUser)
+
+    updateUserList()
+  })
+
+  socket.on('setIcon', function(value) {
+    log(`user ${socket.id} set their icon to ${value}`)
+
+    currentUser.icon = value
     users.update(currentUser)
 
     updateUserList()
