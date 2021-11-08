@@ -57,6 +57,7 @@ io.on('connection', function(socket) {
   }
 
   const updateUserList = () => {
+    console.log("UPDATE USER LIST")
     emitToRoom('userList', maskEstimations(roomUsers()))
   }
 
@@ -151,11 +152,11 @@ io.on('connection', function(socket) {
     updateUserList()
   })
 
-  socket.on('setEstimationValues', function(values) {
+  socket.on('setEstimationValues', function(values: string[]) {
     if (!isAdmin(currentUser) || !currentRoom) {
       return
     }
-    
+
     currentRoom.estimationValues = values
     rooms.update(currentRoom)
     updateUserList()
@@ -164,7 +165,7 @@ io.on('connection', function(socket) {
   })
 
   socket.on('clearEstimations', function() {
-    if (currentUser && !isAdmin(currentUser)) {
+    if (!currentUser || !isAdmin(currentUser)) {
       return
     }
 
