@@ -1,13 +1,13 @@
 <template>
-  <div class="user">
+  <div :class="['user', highlight && 'highlight' ]">
     <div class="role-icon">
-      <i v-if="isAdmin(user)" class="fas fa-crown"></i>
+      <i v-if="isAdmin(user)" class="fas fa-crown"/>
       <i
         v-if="isAdmin(currentUser) && user.id !== currentUser.id"
         class="fas fa-crown shadow"
         @click="grantAdmin(user)"
-      ></i>
-      <i v-if="user.roles.includes('TRACK_TIME')" class="fas fa-clock"></i>
+      />
+      <i v-if="user.roles.includes('TRACK_TIME')" class="fas fa-clock"/>
     </div>
     <emoji-picker @emoji="changeIcon" :emojiTable="emojiTable">
       <div
@@ -22,8 +22,8 @@
           {{ user.icon }}
         </template>
         <template v-else>
-          <i v-if="user.name !== ''" class="fas fa-user"></i>
-          <i v-else class="fas fa-user-secret"></i>
+          <i v-if="user.name !== ''" class="fas fa-user" />
+          <i v-else class="fas fa-user-secret" />
         </template>
       </div>
       <div slot="emoji-picker" slot-scope="{ emojis, insert }">
@@ -47,7 +47,7 @@
     </emoji-picker>
     <div class="name">{{ user.name }}</div>
     <div class="estimation">
-      <i v-if="user.estimation === true" class="fas fa-check"></i>
+      <i v-if="user.estimation === true" class="fas fa-check"/>
       <span v-else>{{ user.estimation }}</span>
     </div>
   </div>
@@ -75,6 +75,10 @@ export default {
     },
     currentUser: {
       type: Object,
+    },
+    highlight: {
+      type: Boolean,
+      default: false,
     },
   },
   mounted() {
@@ -119,6 +123,13 @@ export default {
   align-content: center;
 
   color: var(--GLOBAL_TEXT_COLOR_LIGHTEST);
+
+  border-radius: var(--GLOBAL_BORDER_RADIUS_DEFAULT);
+  padding: 0.5rem 0;
+
+  &.highlight {
+    background: rgba(255,255,255, 0.15);
+  }
 }
 
 .icon {

@@ -9,7 +9,16 @@
     <div :class="['ui_grid', currentUserIsAdmin && 'ui_grid--admin' ]" v-else>
       <AdminControls v-if="currentUserIsAdmin" />
       <div class="chart-container">
-        <estimation-chart :chart-data="chartData" />
+        <EstimationChart :chart-data="chartData" @click="highlightUsersByEstimation"/>
+
+        <dl>
+          <dt>Minimum:</dt>
+          <dd>{{ estimations.min }}</dd>
+          <dt>Maximum:</dt>
+          <dd>{{ estimations.max }}</dd>
+          <dt>Most agreed on:</dt>
+          <dd>{{ estimations.mostAgreedOn }}</dd>
+        </dl>
       </div>
 
       <div class="users">
@@ -18,6 +27,7 @@
           :key="user.id"
           :user="user"
           :currentUser="currentUser"
+          :highlight="highlightEstimation === user.estimation"
         />
       </div>
 
@@ -43,6 +53,9 @@ import EstimationChart from '../components/estimationChart.vue'
 import EstimationValues from '../components/estimationValues.vue'
 import UserCard from '../components/userCard.vue'
 import UserControls from '../components/userControls.vue'
+
+import { findLastIndex } from '../utils/array'
+
 let reconnectionInterval = undefined
 
 export default {
@@ -68,6 +81,7 @@ export default {
         maintainAspectRatio: false,
       },
       dndOptions: this.currentDndOptions,
+      highlightEstimation: undefined
     }
   },
 
@@ -79,19 +93,30 @@ export default {
           {
             label: 'Estimations',
             backgroundColor: '#f87979',
-            data: this.estimations,
+            data: this.estimations.values,
           },
         ],
       }
     },
     estimations: function () {
       if (!this.users) {
-        return []
+        return null
       }
       const intArr = Object.values(this.users).map((user) => user.estimation)
-      return this.estimationValues.map(
+      const values = this.estimationValues.map(
         (value) => intArr.filter((x) => x === value).length || null
       )
+
+      const min = this.estimationValues[values.findIndex(e => e !== null)]
+      const max = this.estimationValues[findLastIndex(values,e => e !== null)]
+      const mostAgreedOn = this.estimationValues[findLastIndex(values, e => e === Math.max(...values))]
+
+      return {
+        values,
+        min,
+        max,
+        mostAgreedOn,
+      }
     },
 
     currentUser: function () {
@@ -173,6 +198,14 @@ export default {
       this.estimation = value
       this.$socket.client.emit('setEstimation', value)
     },
+
+    highlightUsersByEstimation(data) {
+      if (this.highlightEstimation === data.value) {
+        this.highlightEstimation = undefined
+      } else {
+        this.highlightEstimation = data.value
+      }
+    }
   },
 }
 </script>
