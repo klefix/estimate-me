@@ -8,6 +8,7 @@
   "scripts": {
     "server:dev": "nodemon -r esm server/index.js",
     "server:prod": "node -r esm server/index.js",
+    "dev": "yarn serve",
     "serve": "vue-cli-service serve",
     "build": "vue-cli-service build",
     "lint": "vue-cli-service lint"
