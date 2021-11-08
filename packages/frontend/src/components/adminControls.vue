@@ -26,32 +26,34 @@
   </div>
 </template>
 
-<script>
+<script lang="ts">
+import { Component } from 'vue-property-decorator'
+import Vue from 'vue'
 import BaseButton from '../components/baseButton.vue'
 
-export default {
+@Component({
   name: "AdminControls",
   components: {
     BaseButton,
   },
-  data() {
-    return {
-      estimationValues: '',
-    }
-  },
-  methods: {
-    clearEstimations() {
-      this.$socket.client.emit('clearEstimations')
-    },
+})
+export default class AdminControls extends Vue {
+  estimationValues = ''
 
-    revealEstimations() {
-      this.$socket.client.emit('revealEstimations')
-    },
+  get estimationValuesArray() {
+    return this.estimationValues.split(',').map(value => value.trim())
+  }
 
-    setEstimationValues() {
-      console.log({estimationValues: this.estimationValues})
-      this.$socket.client.emit('setEstimationValues', this.estimationValues)
-    }
+  clearEstimations() {
+    this.$socket.client.emit('clearEstimations')
+  }
+
+  revealEstimations() {
+    this.$socket.client.emit('revealEstimations')
+  }
+
+  setEstimationValues() {
+    this.$socket.client.emit('setEstimationValues', this.estimationValues)
   }
 }
 </script>
