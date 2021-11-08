@@ -1,4 +1,4 @@
-export const log = (msg: string, msg2?: string) => {
+export const log = (msg: string, msg2?: any) => {
   const date = new Date().toDateString().toLocaleString()
 
   let str = `[${date}]: ${msg}`
