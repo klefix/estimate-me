@@ -27,32 +27,31 @@
 </template>
 
 <script>
+import Vue from 'vue'
 import BaseButton from '../components/baseButton.vue'
-export default {
+import { Component } from 'vue-property-decorator'
+
+@Component({
   components: {
     BaseButton,
-  },
-  data() {
-    return {
-      roomName: '',
-      invalidRoomName: false,
-      btnActive: false,
+  }
+})
+export default class Intro extends Vue {
+
+  roomName = ''
+  invalidRoomName = false
+  btnActive = false
+
+
+  joinRoom() {
+    // check if room exists
+    if (this.roomName === '') {
+      this.invalidRoomName = true
+      return
     }
-  },
 
-  methods: {
-    // simulate button click
-
-    joinRoom() {
-      // check if room exists
-      if (this.roomName === '') {
-        this.invalidRoomName = true
-        return
-      }
-
-      this.$router.push('/' + this.roomName)
-    },
-  },
+    this.$router.push('/' + this.roomName)
+  }
 }
 </script>
 

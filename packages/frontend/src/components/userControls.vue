@@ -18,40 +18,41 @@
   </div>
 </template>
 <script>
+import Vue from 'vue'
 import BaseButton from '../components/baseButton.vue'
+import { Component } from 'vue-property-decorator'
 
-export default {
+@Component({
   name: 'UserControls',
   components: {
     BaseButton,
   },
-  data() {
-    return {
-      name: '',
-      timeoutId: undefined,
-      justCopied: false,
+})
+export default class UserControls extends Vue {
+
+  name = ''
+  timeoutId = undefined
+  justCopied = false
+
+
+  setName() {
+    if (this.name) {
+      this.$socket.client.emit('setName', this.name)
     }
-  },
-  methods: {
-    setName() {
-      if (this.name) {
-        this.$socket.client.emit('setName', this.name)
-      }
-    },
+  }
 
-    disconnect() {
-      this.$socket.client.disconnect()
-    },
+  disconnect() {
+    this.$socket.client.disconnect()
+  }
 
-    async copyLink() {
-      await navigator.clipboard.writeText(location.href)
-      if (this.timeoutId) clearTimeout(this.timeoutId)
-      this.justCopied = true
-      this.timeoutId = setTimeout(() => {
-        this.justCopied = false
-      }, 2500)
-    },
-  },
+  async copyLink() {
+    await navigator.clipboard.writeText(location.href)
+    if (this.timeoutId) clearTimeout(this.timeoutId)
+    this.justCopied = true
+    this.timeoutId = setTimeout(() => {
+      this.justCopied = false
+    }, 2500)
+  }
 }
 </script>
 

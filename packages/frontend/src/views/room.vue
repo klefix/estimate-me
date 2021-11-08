@@ -55,15 +55,20 @@
   </div>
 </template>
 
-<script>
+<script lang="ts">
+import Vue from 'vue'
 import BaseButton from '../components/baseButton.vue'
 import EstimationChart from '../components/estimationChart.vue'
 import EstimationNumbers from '../components/estimationNumbers.vue'
 import UserCard from '../components/userCard.vue'
 import UserControls from '../components/userControls.vue'
-let reconnectionInterval = undefined
+import { Component } from 'vue-property-decorator'
 
-export default {
+import { Socket } from 'vue-socket.io-extended'
+
+type User = any // TODO replace with actually typed user
+
+@Component({
   components: {
     BaseButton,
     EstimationChart,
@@ -71,127 +76,124 @@ export default {
     UserCard,
     UserControls,
   },
+})
+export default class Room extends Vue {
 
-  data() {
+  roomName = this.$route.params.roomName
+  roomId: string | null = null
+  isConnected = false
+  users: User[] = [] // TODO specific type for user
+  numbers = ['1', '2', '3', '5', '8', '13', '21', '?']
+  name = ''
+  estimation: string | null = null
+  options= {
+    responsive: true,
+    maintainAspectRatio: false,
+  }
+  reconnectionInterval?: number
+
+  get chartData () {
     return {
-      roomName: this.$route.params.roomName,
-      roomId: undefined,
-      isConnected: false,
-      users: [],
-      numbers: ['1', '2', '3', '5', '8', '13', '21', '?'],
-      name: '',
-      estimation: null,
-      options: {
-        responsive: true,
-        maintainAspectRatio: false,
-      },
-      dndOptions: this.currentDndOptions,
+      labels: this.numbers,
+      datasets: [
+        {
+          label: 'Estimations',
+          backgroundColor: '#f87979',
+          data: this.estimations,
+        },
+      ],
     }
-  },
+  }
+  
+  get estimations() {
+    if (!this.users) {
+      return []
+    }
+    const intArr = Object.values(this.users).map((user) => (user as any).estimation)
+    return this.numbers.map(
+      (fibNum) => intArr.filter((x) => x === fibNum).length || null
+    )
+  }
 
-  computed: {
-    chartData: function () {
-      return {
-        labels: this.numbers,
-        datasets: [
-          {
-            label: 'Estimations',
-            backgroundColor: '#f87979',
-            data: this.estimations,
-          },
-        ],
-      }
-    },
-    estimations: function () {
-      if (!this.users) {
-        return []
-      }
-      const intArr = Object.values(this.users).map((user) => user.estimation)
-      return this.numbers.map(
-        (fibNum) => intArr.filter((x) => x === fibNum).length || null
-      )
-    },
+  get currentUser() {
+    return this.users.find((user) => user.id === this.$socket.client.id)
+  }
 
-    currentUser: function () {
-      return this.users.find((user) => user.id === this.$socket.client.id)
-    },
-
-    currentUserIsAdmin: function () {
-      if (!this.currentUser) {
-        return false
-      }
-      return this.currentUser.roles.includes('ADMIN')
-    },
-  },
+  get currentUserIsAdmin() {
+    if (!this.currentUser) {
+      return false
+    }
+    return this.currentUser.roles.includes('ADMIN')
+  }
 
   mounted() {
     this.isConnected = this.$socket.connected
-
-    reconnectionInterval = setInterval(this.reconnect, 1000)
-
+    this.reconnectionInterval = setInterval(this.reconnect, 1000)
     this.reconnect()
-  },
+  }
 
   destroyed() {
-    clearInterval(reconnectionInterval)
-  },
+    if (this.reconnectionInterval) clearInterval(this.reconnectionInterval)
+  }
 
-  sockets: {
-    connect() {
-      this.isConnected = true
-    },
+  @Socket()
+  connect() {
+    this.isConnected = true
+  }
 
-    disconnect() {
-      this.isConnected = false
-    },
+  @Socket()
+  disconnect() {
+    this.isConnected = false
+  }
 
-    userList(users) {
-      this.users = users.sort((a, b) => a.$loki > b.$loki)
-    },
+  @Socket()
+  userList(users: User[]) {
+    this.users = users.sort((a: any, b: any) => (a.$loki > b.$loki) as any)
+  }
 
-    joinedRoom(roomId) {
-      this.roomId = roomId
-    },
+  @Socket()
+  joinedRoom(roomId: string) {
+    this.roomId = roomId
+  }
 
-    estimationsCleared() {
-      this.estimation = null
-    },
-  },
+  @Socket()
+  estimationsCleared() {
+    this.estimation = null
+  }
 
-  methods: {
-    reconnect() {
-      if (!this.isConnected) {
-        console.log('Reconnecting...')
-        this.$socket.client.connect()
-        this.joinRoom()
-      }
-      if (!this.roomId) {
-        this.joinRoom()
-      }
-    },
+  reconnect() {
+    if (!this.isConnected) {
+      console.log('Reconnecting...')
+      this.$socket.client.connect()
+      this.joinRoom()
+    }
+    if (!this.roomId) {
+      this.joinRoom()
+    }
+  }
 
-    joinRoom() {
-      console.log('Joining Room...')
-      this.$socket.client.emit('joinRoom', this.roomName)
-    },
+  joinRoom() {
+    console.log('Joining Room...')
+    this.$socket.client.emit('joinRoom', this.roomName)
+  }
 
-    estimate(value) {
-      // allow deselect of number/button
-      if (this.estimation === value) {
-        value = null
-      }
-      this.estimation = value
-      this.$socket.client.emit('setEstimation', value)
-    },
+  estimate(value: string | null) {
+    // allow deselect of number/button
+    if (this.estimation === value) {
+      value = null
+    }
+    this.estimation = value
+    this.$socket.client.emit('setEstimation', value)
+  }
 
-    clearEstimations() {
-      this.$socket.client.emit('clearEstimations')
-    },
+  clearEstimations() {
+    this.$socket.client.emit('clearEstimations')
+  }
 
-    revealEstimations() {
-      this.$socket.client.emit('revealEstimations')
-    },
-  },
+  revealEstimations() {
+    this.$socket.client.emit('revealEstimations')
+  }
+
 }
 </script>
 <style lang="scss" scoped>

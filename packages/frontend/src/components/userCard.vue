@@ -19,29 +19,29 @@
   </div>
 </template>
 
-<script>
-export default {
+<script lang="ts">
+import { Role, User } from '@estimate-me/api'
+import Vue from 'vue'
+import { Component, Prop } from 'vue-property-decorator'
+
+@Component({
   name: 'UserCard',
-  props: {
-    user: {
-      required: true,
-      type: Object,
-    },
-    currentUser: {
-      type: Object,
-    },
-  },
-  methods: {
-    isAdmin(user) {
-      if (!user) {
-        return false
-      }
-      return user.roles.includes('ADMIN')
-    },
-    grantAdmin(user) {
-      this.$socket.client.emit('grantAdmin', user.id)
-    },
-  },
+})
+export default class UserControls extends Vue {
+
+  @Prop({ required: true, type: Object }) user!: User
+
+  @Prop({ type: Object }) currentUser!: User
+
+  isAdmin(user: User) {
+    if (!user) {
+      return false
+    }
+    return user.roles.includes(Role.ADMIN)
+  }
+  grantAdmin(user: User) {
+    this.$socket.client.emit('grantAdmin', user.id)
+  }
 }
 </script>
 

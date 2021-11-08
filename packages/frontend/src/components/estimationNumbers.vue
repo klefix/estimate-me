@@ -15,28 +15,26 @@
     </div>
   </div>
 </template>
-<script>
+
+<script lang="ts">
+import Vue from 'vue'
 import BaseButton from './baseButton.vue'
-export default {
+import { Component, Prop } from 'vue-property-decorator'
+
+@Component({
   name: 'EstimationNumbers',
   components: {
     BaseButton,
   },
-  props: {
-    numbers: {
-      type: Array,
-      required: true,
-    },
-    estimation: {
-      type: String,
-      default: null,
-    },
-  },
-  methods: {
-    setEstimation(number) {
-      this.$emit('estimated', number)
-    },
-  },
+})
+export default class EstimationNumbers extends Vue {
+  @Prop({ type: Array, required: true }) numbers!: string[]
+  
+  @Prop({ type: String, default: null }) estimation!: string | null
+
+  setEstimation(number: string) {
+    this.$emit('estimated', number)
+  }
 }
 </script>
 

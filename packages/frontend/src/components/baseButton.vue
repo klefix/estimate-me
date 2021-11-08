@@ -8,32 +8,34 @@
     <slot />
   </component>
 </template>
-<script>
-export default {
-  name: 'BaseButton',
 
-  props: {
-    tag: {
-      type: String,
-    },
-    variant: {
-      type: String,
-      validator: (string) =>
-        ['primary', 'secondary', 'success', 'danger', 'text'].includes(string),
-      default: 'secondary',
-    },
-  },
+<script lang="ts">
+import Vue from 'vue'
+import { Component, Prop } from 'vue-property-decorator'
 
-  computed: {
-    comp() {
-      if (this.$attrs.to) {
-        return 'router-link'
-      }
-      return 'button'
-    },
-  },
+function variantValidator(variant: string) {
+  return ['primary', 'secondary', 'success', 'danger', 'text'].includes(variant)
 }
-</script>
+
+@Component({
+  name: 'BaseButton',
+})
+export default class BaseButton extends Vue {
+
+
+  @Prop({ type: String }) tag?: string
+  
+  @Prop({ type: String, validator: variantValidator, default: 'secondary' }) variant!: string
+
+
+  get comp() {
+    if (this.$attrs.to) {
+      return 'router-link'
+    }
+    return 'button'
+  }
+}
+</script>>
 
 <style lang="scss" scoped>
 .button {

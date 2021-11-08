@@ -1,0 +1,29 @@
+{
+  "name": "@estimate-me/backend",
+  "version": "1.0.0",
+  "main": "index.js",
+  "license": "MIT",
+  "author": {
+    "name": "Felix Brüning",
+    "email": "info@felixbruening.de"
+  },
+  "dependencies": {
+    "dotenv-flow": "^3.1.0",
+    "esm": "^3.2.25",
+    "express": "^4.17.1",
+    "lokijs": "^1.5.8",
+    "socket.io": "^4.3.2"
+  },
+  "scripts": {
+    "dev": "nodemon ./src/index.ts",
+    "start": "node ./dist/index.ts",
+    "build": "tsc"
+  },
+  "devDependencies": {
+    "@types/dotenv-flow": "^3.2.0",
+    "@types/express": "^4.17.13",
+    "@types/lokijs": "^1.5.7",
+    "nodemon": "^2.0.14",
+    "ts-node": "^10.4.0"
+  }
+}

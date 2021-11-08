@@ -17,56 +17,51 @@
   </div>
 </template>
 
-<script>
+<script lang="ts">
+import Vue from 'vue'
 import BaseButton from './components/baseButton.vue'
 import SettingsPanel from './components/settingsPanel.vue'
+import { Component, Watch } from 'vue-property-decorator'
 
-export default {
-  name: 'App.vue',
-
+@Component({
+  name: 'App',
   components: {
     BaseButton,
     SettingsPanel,
-  },
+  }
+})
+export default class App extends Vue {
 
-  data() {
-    return {
-      showSettings: false,
-      theme: 'cpt-obvious',
-    }
-  },
+  showSettings = false
+  theme = 'cpt-obvious'
 
-  watch: {
-    theme: {
-      handler() {
-        localStorage.setItem('estimateMeTheme',this.theme);
-      },
-    }
-  },
+  @Watch('theme')
+  onThemeChange(theme: string) {
+    localStorage.setItem('estimateMeTheme', theme);
+  }
 
-  computed: {
-    isRoom() {
-      return this.$route.name === 'room'
-    },
-    roomName() {
-      return this.isRoom ? this.$route.params.roomName : null
-    },
-  },
 
-  methods: {
-    toggleSettings() {
-      this.showSettings = !this.showSettings
-    },
-    setTheme(value) {
-      this.theme = value
-    }
-  },
+  get isRoom() {
+    return this.$route.name === 'room'
+  }
+  
+  get roomName() {
+    return this.isRoom ? this.$route.params.roomName : null
+  }
+
+  toggleSettings() {
+    this.showSettings = !this.showSettings
+  }
+    
+  setTheme(value: string) {
+    this.theme = value
+  }
 
   mounted() {
     if (localStorage.getItem('estimateMeTheme')) {
-      this.theme = localStorage.getItem('estimateMeTheme')
+      this.theme = localStorage.getItem('estimateMeTheme')!
     }
-  },
+  }
 }
 </script>
 

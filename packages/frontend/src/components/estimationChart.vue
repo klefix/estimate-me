@@ -1,8 +1,9 @@
 <script>
+import Vue from 'vue'
 import { Bar, mixins } from 'vue-chartjs'
 const { reactiveProp } = mixins
 
-export default {
+export default Vue.extend({
   extends: Bar,
   mixins: [reactiveProp],
 
@@ -45,5 +46,5 @@ export default {
       },
     })
   },
-}
+})
 </script>

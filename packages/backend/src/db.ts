@@ -1,3 +1,3 @@
-const loki = require('lokijs')
+import loki from 'lokijs'
 
 export default new loki('estimate-me.db')

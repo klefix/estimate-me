@@ -13,7 +13,7 @@ import './assets/scss/main.scss'
 
 const { VUE_APP_SERVER_URI } = process.env
 
-export const SocketInstance = socketClient(VUE_APP_SERVER_URI)
+export const SocketInstance = socketClient(VUE_APP_SERVER_URI!)
 
 const routes = [
   { path: '/', name: 'index', component: Intro },

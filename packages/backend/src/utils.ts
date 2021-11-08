@@ -1,4 +1,4 @@
-export const log = (msg, msg2) => {
+export const log = (msg: string, msg2?: string) => {
   const date = new Date().toDateString().toLocaleString()
 
   let str = `[${date}]: ${msg}`
@@ -8,7 +8,10 @@ export const log = (msg, msg2) => {
   console.log(str)
 }
 
-export const renderEstimation = (user, currentRoom) => {
+type User = any // TODO actual type
+type Room = any // TODO actual type
+
+export const renderEstimation = (user: User, currentRoom: Room) => {
   if (currentRoom.estimationsVisible && user.estimation !== null) {
     return user.estimation
   }

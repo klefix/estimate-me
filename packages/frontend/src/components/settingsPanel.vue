@@ -16,38 +16,42 @@
     </form>
   </aside>
 </template>
-<script>
-export default {
+
+<script lang="ts">
+import Vue from 'vue'
+import { Component } from 'vue-property-decorator'
+
+@Component({
   name: 'SettingsPanel',
-  data() {
-    return {
-      settings: {
-        theme: 'cpt-obvious',
-      },
-      availableThemes: [
-        {
-          value: 'cpt-obvious',
-          name: 'Cpt. Obvious'
-        },
-        {
-          value: 'neumorpheus',
-          name: 'NeuMorpheus'
-        },
-        {
-          value: 'c64',
-          name: 'C64'
-        }
-      ]
+
+})
+export default class SettingsPanel extends Vue {
+
+  settings = {
+    theme: 'cpt-obvious',
+  }
+  availableThemes = [
+    {
+      value: 'cpt-obvious',
+      name: 'Cpt. Obvious'
+    },
+    {
+      value: 'neumorpheus',
+      name: 'NeuMorpheus'
+    },
+    {
+      value: 'c64',
+      name: 'C64'
     }
-  },
-  methods: {
-    saveSettings() {
-      console.log(this.settings)
-    }
-  },
+  ]
+
+  saveSettings() {
+    console.log(this.settings)
+  }
+  
   mounted() {
     if (localStorage.getItem('estimateMeTheme')) {
-      this.settings.theme = localStorage.getItem('estimateMeTheme')
+      this.settings.theme = localStorage.getItem('estimateMeTheme')!
     }
   }
 }
