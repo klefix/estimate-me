@@ -26,7 +26,7 @@ export default class BaseButton extends Vue {
   @Prop({ type: String, validator: variantValidator, default: 'secondary' })
   variant!: string
 
-  get comp() {
+  get comp(): string {
     if (this.$attrs.to) {
       return 'router-link'
     }

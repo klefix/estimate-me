@@ -70,7 +70,7 @@ import { Socket } from 'vue-socket.io-extended'
 })
 export default class Room extends Vue {
   roomName = this.$route.params.roomName
-  roomId = null
+  roomId: string | null = null
   isConnected = false
   users: User[] = []
   name = ''
@@ -83,7 +83,8 @@ export default class Room extends Vue {
   reconnectionInterval: number | null = null
   highlightEstimation: string | null = null
 
-  get chartData() {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  get chartData(): { labels: any[]; datasets: any[] } {
     return {
       labels: this.estimationValues,
       datasets: [
@@ -96,7 +97,12 @@ export default class Room extends Vue {
     }
   }
 
-  get estimations() {
+  get estimations(): null | {
+    values: (number | null)[]
+    min: string
+    max: string
+    mostAgreedOn: string
+  } {
     if (!this.users) {
       return null
     }
@@ -106,10 +112,16 @@ export default class Room extends Vue {
     )
     const min = this.estimationValues[values.findIndex((e) => e !== null)]
     const max =
-      this.estimationValues[findLastIndex(values, (e: any) => e !== null)]
+      this.estimationValues[
+        findLastIndex(values, (e: number | null) => e !== null)
+      ]
     const mostAgreedOn =
       this.estimationValues[
-        findLastIndex(values, (e: any) => e === Math.max(...(values as any)))
+        findLastIndex(
+          values,
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
+          (e: number | null) => e === Math.max(...(values as any))
+        )
       ]
     return {
       values,
@@ -119,54 +131,56 @@ export default class Room extends Vue {
     }
   }
 
-  get currentUser() {
+  get currentUser(): User {
     return this.users.find((user) => user.id === this.$socket.client.id)
   }
 
-  get currentUserIsAdmin() {
+  get currentUserIsAdmin(): boolean {
     if (!this.currentUser) {
       return false
     }
     return this.currentUser.roles.includes(Role.ADMIN)
   }
 
-  mounted() {
+  mounted(): void {
     this.isConnected = this.$socket.connected
     this.reconnectionInterval = setInterval(this.reconnect, 1000)
     this.reconnect()
   }
 
-  destroyed() {
+  destroyed(): void {
     if (this.reconnectionInterval) clearInterval(this.reconnectionInterval)
   }
 
   @Socket()
-  connect() {
+  connect(): void {
     this.isConnected = true
   }
 
   @Socket()
-  disconnect() {
+  disconnect(): void {
     this.isConnected = false
   }
 
   @Socket()
-  userList(users: any) {
-    this.users = users.sort((a: any, b: any) => a.$loki > b.$loki)
+  userList(users: User[]): void {
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-ignore
+    this.users = users.sort((a, b) => a.$loki > b.$loki)
   }
 
   @Socket()
-  joinedRoom(roomId: any) {
+  joinedRoom(roomId: string): void {
     this.roomId = roomId
   }
 
   @Socket()
-  estimationsCleared() {
+  estimationsCleared(): void {
     this.estimation = null
   }
 
   @Socket()
-  estimationValuesUpdated(values: string[]) {
+  estimationValuesUpdated(values: string[]): void {
     console.info('estimationValuesUpdated', values)
     if (!values) {
       return
@@ -174,7 +188,7 @@ export default class Room extends Vue {
     this.estimationValues = values
   }
 
-  reconnect() {
+  reconnect(): void {
     if (!this.isConnected) {
       console.log('Reconnecting...')
       this.$socket.client.connect()
@@ -184,11 +198,12 @@ export default class Room extends Vue {
       this.joinRoom()
     }
   }
-  joinRoom() {
+  joinRoom(): void {
     console.log('Joining Room...')
     this.$socket.client.emit('joinRoom', this.roomName)
   }
-  estimate(value: string | null) {
+
+  estimate(value: string | null): void {
     // allow deselect of number/button
     if (this.estimation === value) {
       value = null
@@ -196,7 +211,8 @@ export default class Room extends Vue {
     this.estimation = value
     this.$socket.client.emit('setEstimation', value)
   }
-  highlightUsersByEstimation(data: any) {
+
+  highlightUsersByEstimation(data: { value: string; id: string }): void {
     if (this.highlightEstimation === data.value) {
       this.highlightEstimation = null
     } else {

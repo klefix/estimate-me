@@ -32,7 +32,7 @@ export default class EstimationNumbers extends Vue {
 
   @Prop({ type: String, default: null }) estimation!: string | null
 
-  setEstimation(number: string) {
+  setEstimation(number: string): void {
     this.$emit('estimated', number)
   }
 }

@@ -4,15 +4,15 @@
   @see https://gist.github.com/tkon99/4c98af713acc73bed74c
 */
 
-function getRandomInt(min, max) {
+function getRandomInt(min: number, max: number): number {
   return Math.floor(Math.random() * (max - min)) + min
 }
 
-function pickRandomItem(arr) {
+function pickRandomItem<T>(arr: Array<T>): T {
   return arr[getRandomInt(0, arr.length + 1)]
 }
 
-export function generateName() {
+export function generateName(): string {
   const adjectives = [
     'abandoned',
     'able',

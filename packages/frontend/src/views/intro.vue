@@ -28,7 +28,7 @@
   </div>
 </template>
 
-<script>
+<script lang="ts">
 import Vue from 'vue'
 import BaseButton from '../components/baseButton.vue'
 import { Component } from 'vue-property-decorator'
@@ -44,11 +44,11 @@ export default class Intro extends Vue {
   invalidRoomName = false
   btnActive = false
 
-  randomRoomName() {
+  randomRoomName(): void {
     this.roomName = generateName()
   }
 
-  joinRoom() {
+  joinRoom(): void {
     // check if room exists
     if (this.roomName === '') {
       this.invalidRoomName = true

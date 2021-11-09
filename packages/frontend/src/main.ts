@@ -13,6 +13,7 @@ import './assets/scss/main.scss'
 
 const { VUE_APP_SERVER_URI } = process.env
 
+// eslint-disable-next-line @typescript-eslint/no-non-null-assertion
 export const SocketInstance = socketClient(VUE_APP_SERVER_URI!)
 
 const routes = [

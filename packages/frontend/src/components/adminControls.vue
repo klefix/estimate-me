@@ -40,19 +40,19 @@ import BaseButton from '../components/baseButton.vue'
 export default class AdminControls extends Vue {
   estimationValues = ''
 
-  get estimationValuesArray() {
+  get estimationValuesArray(): string[] {
     return this.estimationValues.split(',').map((value) => value.trim())
   }
 
-  clearEstimations() {
+  clearEstimations(): void {
     this.$socket.client.emit('clearEstimations')
   }
 
-  revealEstimations() {
+  revealEstimations(): void {
     this.$socket.client.emit('revealEstimations')
   }
 
-  setEstimationValues() {
+  setEstimationValues(): void {
     this.$socket.client.emit('setEstimationValues', this.estimationValues)
   }
 }

@@ -27,28 +27,29 @@ export default class App extends Vue {
   theme = 'cpt-obvious'
 
   @Watch('theme')
-  onThemeChange(theme: string) {
+  onThemeChange(theme: string): void {
     localStorage.setItem('estimateMeTheme', theme)
   }
 
-  get isRoom() {
+  get isRoom(): boolean {
     return this.$route.name === 'room'
   }
 
-  get roomName() {
+  get roomName(): string | null {
     return this.isRoom ? this.$route.params.roomName : null
   }
 
-  toggleSettings() {
+  toggleSettings(): void {
     this.showSettings = !this.showSettings
   }
 
-  setTheme(value: string) {
+  setTheme(value: string): void {
     this.theme = value
   }
 
-  mounted() {
+  mounted(): void {
     if (localStorage.getItem('estimateMeTheme')) {
+      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
       this.theme = localStorage.getItem('estimateMeTheme')!
     }
   }

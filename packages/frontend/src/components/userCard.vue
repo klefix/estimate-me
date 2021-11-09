@@ -74,27 +74,27 @@ export default class UserControls extends Vue {
   @Prop({ required: true, type: Object }) user!: User
   @Prop({ type: Object }) currentUser!: User
   @Prop({ type: Boolean, default: false }) highlight!: boolean
-  @Ref() readonly emojiPicker!: any
+  @Ref() readonly emojiPicker!: HTMLInputElement
 
-  mounted() {
+  mounted(): void {
     if (localStorage) {
       this.icon = localStorage.getItem('icon')
       this.broadcastIcon()
     }
   }
 
-  isAdmin(user: User) {
+  isAdmin(user: User): boolean {
     if (!user) {
       return false
     }
     return user.roles.includes(Role.ADMIN)
   }
 
-  grantAdmin(user: User) {
+  grantAdmin(user: User): void {
     this.$socket.client.emit('grantAdmin', user.id)
   }
 
-  changeIcon(icon: string) {
+  changeIcon(icon: string): void {
     this.icon = icon
     this.emojiPicker.click()
 
@@ -104,7 +104,7 @@ export default class UserControls extends Vue {
     this.broadcastIcon()
   }
 
-  broadcastIcon() {
+  broadcastIcon(): void {
     this.$socket.client.emit('setIcon', this.icon)
   }
 }

@@ -44,12 +44,13 @@ export default class SettingsPanel extends Vue {
     },
   ]
 
-  saveSettings() {
+  saveSettings(): void {
     console.log(this.settings)
   }
 
-  mounted() {
+  mounted(): void {
     if (localStorage.getItem('estimateMeTheme')) {
+      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
       this.settings.theme = localStorage.getItem('estimateMeTheme')!
     }
   }

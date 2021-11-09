@@ -20,7 +20,7 @@
   </div>
 </template>
 
-<script>
+<script lang="ts">
 import Vue from 'vue'
 import BaseButton from '../components/baseButton.vue'
 import { Component } from 'vue-property-decorator'
@@ -32,33 +32,33 @@ import { Component } from 'vue-property-decorator'
   },
 })
 export default class UserControls extends Vue {
-  name = ''
-  timeoutId = undefined
+  name: string | null = ''
+  timeoutId: number | undefined = undefined
   justCopied = false
 
-  mounted() {
+  mounted(): void {
     if (localStorage) {
       this.name = localStorage.getItem('name')
       this.broadcastName()
     }
   }
 
-  setName() {
-    if (localStorage) {
+  setName(): void {
+    if (localStorage && this.name) {
       localStorage.setItem('name', this.name)
     }
     this.broadcastName()
   }
 
-  broadcastName() {
+  broadcastName(): void {
     this.$socket.client.emit('setName', this.name)
   }
 
-  disconnect() {
+  disconnect(): void {
     this.$socket.client.disconnect()
   }
 
-  async copyLink() {
+  async copyLink(): Promise<void> {
     await navigator.clipboard.writeText(location.href)
     if (this.timeoutId) clearTimeout(this.timeoutId)
     this.justCopied = true
