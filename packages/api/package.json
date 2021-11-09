@@ -5,6 +5,8 @@
   "types": "./dist/index.d.ts",
   "scripts": {
     "build": "tsc",
-    "dev": "tsc -w"
+    "dev": "tsc -w",
+    "lint": "eslint src/**/*",
+    "lint:fix": "eslint src/**/* --fix"
   }
 }

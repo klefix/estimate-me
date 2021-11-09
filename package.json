@@ -13,7 +13,9 @@
   },
   "scripts": {
     "dev": "lerna run --parallel dev",
-    "build": "lerna run build"
+    "build": "lerna run build",
+    "lint": "lerna run lint",
+    "lint:fix": "lerna run lint:fix"
   },
   "main": "index.js",
   "devDependencies": {

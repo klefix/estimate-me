@@ -17,7 +17,9 @@
   "scripts": {
     "dev": "nodemon ./src/index.ts",
     "start": "node ./dist/index.ts",
-    "build": "tsc"
+    "build": "tsc",
+    "lint": "eslint src/**/*",
+    "lint:fix": "eslint src/**/* --fix"
   },
   "devDependencies": {
     "@types/dotenv-flow": "^3.2.0",
