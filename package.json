@@ -1,61 +1,27 @@
 {
   "name": "estimate-me",
+  "private": true,
   "version": "0.0.3",
   "author": {
     "name": "Felix Brüning",
     "email": "info@felixbruening.de"
   },
+  "workspaces": {
+    "packages": [
+      "packages/*"
+    ]
+  },
   "scripts": {
-    "server:dev": "nodemon -r esm server/index.js",
-    "server:prod": "node -r esm server/index.js",
-    "dev": "yarn serve",
-    "serve": "vue-cli-service serve",
-    "build": "vue-cli-service build",
-    "lint": "vue-cli-service lint"
+    "dev": "lerna run --parallel dev",
+    "build": "lerna run build",
+    "lint": "lerna run lint",
+    "lint:fix": "lerna run lint:fix"
   },
   "main": "index.js",
-  "dependencies": {
-    "@fortawesome/fontawesome-free": "^5.13.0",
-    "chart.js": "^2.9.3",
-    "core-js": "^3.6.4",
-    "dotenv-flow": "^3.1.0",
-    "esm": "^3.2.25",
-    "express": "^4.17.1",
-    "lokijs": "^1.5.8",
-    "prettier": "^1.19.1",
-    "socket.io": "^4.3.2",
-    "socket.io-client": "^4.3.2",
-    "vue": "^2.6.11",
-    "vue-chartjs": "^3.5.0",
-    "vue-emoji-picker": "^1.0.3",
-    "vue-router": "^3.1.6",
-    "vue-socket.io-extended": "^4.2.0"
-  },
   "devDependencies": {
-    "@vue/cli-plugin-babel": "~4.2.0",
-    "@vue/cli-plugin-eslint": "~4.2.0",
-    "@vue/cli-service": "~4.2.0",
-    "babel-eslint": "^10.0.3",
-    "eslint": "^6.7.2",
-    "eslint-plugin-vue": "^6.1.2",
-    "node-sass": "6.0.1",
-    "nodemon": "^2.0.2",
-    "sass-loader": "^10.0.5",
-    "vue-template-compiler": "^2.6.11"
-  },
-  "eslintConfig": {
-    "root": true,
-    "env": {
-      "node": true
-    },
-    "extends": [
-      "plugin:vue/essential",
-      "eslint:recommended"
-    ],
-    "parserOptions": {
-      "parser": "babel-eslint"
-    },
-    "rules": {}
+    "lerna": "^4.0.0",
+    "ts-node": "^10.4.0",
+    "typescript": "~4.1.5"
   },
   "browserslist": [
     "> 1%",

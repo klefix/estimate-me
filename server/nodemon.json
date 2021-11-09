@@ -1,3 +1,0 @@
-{
-  "exec": "node -r esm index.js"
-}
