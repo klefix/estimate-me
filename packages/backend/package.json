@@ -7,6 +7,13 @@
     "name": "Felix Brüning",
     "email": "info@felixbruening.de"
   },
+  "scripts": {
+    "dev": "nodemon ./src/index.ts",
+    "start": "node ./dist/index.ts",
+    "build": "esbuild src/index.ts --bundle --outfile=dist/index.js --platform=node",
+    "lint": "eslint src/**/*",
+    "lint:fix": "eslint src/**/* --fix"
+  },
   "dependencies": {
     "dotenv-flow": "^3.1.0",
     "esm": "^3.2.25",
@@ -14,19 +21,14 @@
     "lokijs": "^1.5.8",
     "socket.io": "^4.3.2"
   },
-  "scripts": {
-    "dev": "nodemon ./src/index.ts",
-    "start": "node ./dist/index.ts",
-    "build": "tsc",
-    "lint": "eslint src/**/*",
-    "lint:fix": "eslint src/**/* --fix"
-  },
   "devDependencies": {
+    "@estimate-me/api": "*",
     "@types/dotenv-flow": "^3.2.0",
     "@types/express": "^4.17.13",
     "@types/lokijs": "^1.5.7",
-    "@estimate-me/api": "*",
+    "esbuild": "^0.13.13",
     "nodemon": "^2.0.14",
-    "ts-node": "^10.4.0"
+    "ts-node": "^10.4.0",
+    "webpack-cli": "^4.9.1"
   }
 }
