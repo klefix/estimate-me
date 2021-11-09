@@ -1,13 +1,13 @@
 <template>
-  <div :class="['user', highlight && 'highlight' ]">
+  <div :class="['user', highlight && 'highlight']">
     <div class="role-icon">
-      <i v-if="isAdmin(user)" class="fas fa-crown"/>
+      <i v-if="isAdmin(user)" class="fas fa-crown" />
       <i
         v-if="isAdmin(currentUser) && user.id !== currentUser.id"
         class="fas fa-crown shadow"
         @click="grantAdmin(user)"
       />
-      <i v-if="user.roles.includes('TRACK_TIME')" class="fas fa-clock"/>
+      <i v-if="user.roles.includes('TRACK_TIME')" class="fas fa-clock" />
     </div>
     <emoji-picker @emoji="changeIcon" :emojiTable="emojiTable">
       <div
@@ -47,7 +47,7 @@
     </emoji-picker>
     <div class="name">{{ user.name }}</div>
     <div class="estimation">
-      <i v-if="user.estimation === true" class="fas fa-check"/>
+      <i v-if="user.estimation === true" class="fas fa-check" />
       <span v-else>{{ user.estimation }}</span>
     </div>
   </div>
@@ -68,8 +68,6 @@ import { Component, Prop, Ref } from 'vue-property-decorator'
   },
 })
 export default class UserControls extends Vue {
-
-
   icon: string | null = null
   emojiTable = emojis
 
@@ -85,7 +83,6 @@ export default class UserControls extends Vue {
     }
   }
 
-
   isAdmin(user: User) {
     if (!user) {
       return false
@@ -96,7 +93,7 @@ export default class UserControls extends Vue {
   grantAdmin(user: User) {
     this.$socket.client.emit('grantAdmin', user.id)
   }
-  
+
   changeIcon(icon: string) {
     this.icon = icon
     this.emojiPicker.click()
@@ -128,7 +125,7 @@ export default class UserControls extends Vue {
   padding: 0.5rem 0;
 
   &.highlight {
-    background: rgba(255,255,255, 0.15);
+    background: rgba(255, 255, 255, 0.15);
   }
 }
 

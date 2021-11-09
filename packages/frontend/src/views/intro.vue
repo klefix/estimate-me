@@ -13,9 +13,7 @@
       <BaseButton @click="randomRoomName">
         <i class="fas fa-dice-five"></i>
       </BaseButton>
-      <small v-show="invalidRoomName">
-        Please enter a valid room name!
-      </small>
+      <small v-show="invalidRoomName"> Please enter a valid room name! </small>
     </div>
     <div>
       <BaseButton ref="joinBtn" variant="primary" @click="joinRoom">
@@ -34,12 +32,12 @@
 import Vue from 'vue'
 import BaseButton from '../components/baseButton.vue'
 import { Component } from 'vue-property-decorator'
-import { generateName } from "@/utils/randomName";
+import { generateName } from '@/utils/randomName'
 
 @Component({
   components: {
     BaseButton,
-  }
+  },
 })
 export default class Intro extends Vue {
   roomName = ''
@@ -49,7 +47,6 @@ export default class Intro extends Vue {
   randomRoomName() {
     this.roomName = generateName()
   }
-
 
   joinRoom() {
     // check if room exists

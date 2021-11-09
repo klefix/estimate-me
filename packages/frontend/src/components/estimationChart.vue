@@ -8,8 +8,10 @@ export default Vue.extend({
   mixins: [reactiveProp],
 
   mounted() {
-    const style = getComputedStyle(document.getElementById('app'));
-    const globalGridLineColor = style.getPropertyValue('--GLOBAL_GRID_LINE_COLOR')
+    const style = getComputedStyle(document.getElementById('app'))
+    const globalGridLineColor = style.getPropertyValue(
+      '--GLOBAL_GRID_LINE_COLOR'
+    )
 
     this.renderChart(this.chartData, {
       scales: {
@@ -24,8 +26,8 @@ export default Vue.extend({
             gridLines: {
               color: globalGridLineColor,
               zeroLineColor: globalGridLineColor,
-            }
-          }
+            },
+          },
         ],
         xAxes: [
           {
@@ -35,14 +37,14 @@ export default Vue.extend({
             gridLines: {
               color: globalGridLineColor,
               zeroLineColor: globalGridLineColor,
-            }
-          }
+            },
+          },
         ],
       },
       legend: {
         labels: {
           fontColor: globalGridLineColor,
-        }
+        },
       },
       onClick: (e) => {
         const clickedElement = this.$data._chart.getElementsAtEvent(e)[0]
@@ -50,10 +52,10 @@ export default Vue.extend({
         if (clickedElement) {
           this.$emit('click', {
             id: clickedElement._index,
-            value: this.chartData.labels[clickedElement._index]
+            value: this.chartData.labels[clickedElement._index],
           })
         }
-      }
+      },
     })
   },
 })

@@ -1,15 +1,14 @@
 <template>
   <div class="grid">
-    <div v-if="!isConnected">
-      Connecting...
-    </div>
-    <div v-else-if="!roomId">
-      Joining room...
-    </div>
-    <div :class="['ui_grid', currentUserIsAdmin && 'ui_grid--admin' ]" v-else>
+    <div v-if="!isConnected">Connecting...</div>
+    <div v-else-if="!roomId">Joining room...</div>
+    <div :class="['ui_grid', currentUserIsAdmin && 'ui_grid--admin']" v-else>
       <AdminControls v-if="currentUserIsAdmin" />
       <div class="chart-container">
-        <EstimationChart :chart-data="chartData" @click="highlightUsersByEstimation"/>
+        <EstimationChart
+          :chart-data="chartData"
+          @click="highlightUsersByEstimation"
+        />
 
         <dl>
           <dt>Minimum:</dt>
@@ -70,7 +69,6 @@ import { Socket } from 'vue-socket.io-extended'
   },
 })
 export default class Room extends Vue {
-
   roomName = this.$route.params.roomName
   roomId = null
   isConnected = false
@@ -98,7 +96,7 @@ export default class Room extends Vue {
     }
   }
 
-  get estimations () {
+  get estimations() {
     if (!this.users) {
       return null
     }
@@ -106,9 +104,13 @@ export default class Room extends Vue {
     const values = this.estimationValues.map(
       (value) => intArr.filter((x) => x === value).length || null
     )
-    const min = this.estimationValues[values.findIndex(e => e !== null)]
-    const max = this.estimationValues[findLastIndex(values, (e: any) => e !== null)]
-    const mostAgreedOn = this.estimationValues[findLastIndex(values, (e: any) => e === Math.max(...values as any))]
+    const min = this.estimationValues[values.findIndex((e) => e !== null)]
+    const max =
+      this.estimationValues[findLastIndex(values, (e: any) => e !== null)]
+    const mostAgreedOn =
+      this.estimationValues[
+        findLastIndex(values, (e: any) => e === Math.max(...(values as any)))
+      ]
     return {
       values,
       min,
@@ -186,7 +188,7 @@ export default class Room extends Vue {
     console.log('Joining Room...')
     this.$socket.client.emit('joinRoom', this.roomName)
   }
-  estimate(value: string | null) {
+  estimate(value: string | null) {
     // allow deselect of number/button
     if (this.estimation === value) {
       value = null
@@ -201,7 +203,6 @@ export default class Room extends Vue {
       this.highlightEstimation = data.value
     }
   }
-
 }
 </script>
 
@@ -221,10 +222,11 @@ export default class Room extends Vue {
 
 .ui_grid {
   display: grid;
-  grid-template-areas: 'graph'
-  'estimation'
-  'users'
-  'controls';
+  grid-template-areas:
+    'graph'
+    'estimation'
+    'users'
+    'controls';
   grid-template-columns: 1fr;
   grid-template-rows: auto;
   grid-gap: 2rem;
@@ -232,26 +234,29 @@ export default class Room extends Vue {
 }
 
 .ui_grid--admin {
-  grid-template-areas: 'graph'
-  'adminArea'
-  'estimation'
-  'users'
-  'controls';
+  grid-template-areas:
+    'graph'
+    'adminArea'
+    'estimation'
+    'users'
+    'controls';
 }
 
-@media(min-width: 768px) {
+@media (min-width: 768px) {
   .ui_grid {
-    grid-template-areas: 'estimation estimation graph'
-    'users users users'
-    'controls controls controls';
+    grid-template-areas:
+      'estimation estimation graph'
+      'users users users'
+      'controls controls controls';
     grid-template-columns: 1fr 1fr 300px;
     grid-template-rows: repeat(3, auto);
   }
   .ui_grid--admin {
-    grid-template-areas: 'adminArea adminArea graph'
-    'estimation estimation graph'
-    'users users users'
-    'controls controls controls';
+    grid-template-areas:
+      'adminArea adminArea graph'
+      'estimation estimation graph'
+      'users users users'
+      'controls controls controls';
     grid-template-rows: repeat(4, auto);
     grid-gap: 2rem;
   }
@@ -284,7 +289,7 @@ export default class Room extends Vue {
   grid-area: controls;
 }
 
-@media(min-width: 768px) {
+@media (min-width: 768px) {
   .header {
     grid-template-columns: 1fr 1fr;
   }

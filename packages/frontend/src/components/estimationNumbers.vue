@@ -29,8 +29,8 @@ import { Component, Prop } from 'vue-property-decorator'
 })
 export default class EstimationNumbers extends Vue {
   @Prop({ type: Array, required: true }) values!: string[]
-  
-  @Prop({ type: String, default: null }) estimation!: string | null
+
+  @Prop({ type: String, default: null }) estimation!: string | null
 
   setEstimation(number: string) {
     this.$emit('estimated', number)
@@ -43,7 +43,10 @@ export default class EstimationNumbers extends Vue {
   align-self: center;
   padding: 2rem 1rem;
   border-radius: var(--GLOBAL_BORDER_RADIUS_DEFAULT);
-  background: var(--estimationBackground, var(--GLOBAL_BACKGROUND_ACCENT_LIGHT));
+  background: var(
+    --estimationBackground,
+    var(--GLOBAL_BACKGROUND_ACCENT_LIGHT)
+  );
   box-shadow: var(--estimationSectionBoxShadow, none);
 }
 .values_wrapper h3 {

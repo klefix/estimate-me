@@ -3,8 +3,8 @@
     <section>
       <p>You are the admin of this room!</p>
       <p>
-        To make someone else admin, move the cursor above their head and
-        click the appearing crown icon.
+        To make someone else admin, move the cursor above their head and click
+        the appearing crown icon.
       </p>
     </section>
     <div>
@@ -32,7 +32,7 @@ import Vue from 'vue'
 import BaseButton from '../components/baseButton.vue'
 
 @Component({
-  name: "AdminControls",
+  name: 'AdminControls',
   components: {
     BaseButton,
   },
@@ -41,7 +41,7 @@ export default class AdminControls extends Vue {
   estimationValues = ''
 
   get estimationValuesArray() {
-    return this.estimationValues.split(',').map(value => value.trim())
+    return this.estimationValues.split(',').map((value) => value.trim())
   }
 
   clearEstimations() {
@@ -58,6 +58,4 @@ export default class AdminControls extends Vue {
 }
 </script>
 
-<style scoped>
-
-</style>
+<style scoped></style>

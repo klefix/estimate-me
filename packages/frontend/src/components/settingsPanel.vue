@@ -1,12 +1,15 @@
 <template>
-  <aside class='settings'>
-    <form class='form' @submit.prevent='saveSettings'>
-      <h2 class='title'>theme</h2>
-      <select v-model='settings.theme' @change="$emit('theme-change', settings.theme)">
+  <aside class="settings">
+    <form class="form" @submit.prevent="saveSettings">
+      <h2 class="title">theme</h2>
+      <select
+        v-model="settings.theme"
+        @change="$emit('theme-change', settings.theme)"
+      >
         <option
-          v-for='theme in availableThemes'
-          :key='theme.value'
-          :value='theme.value'
+          v-for="theme in availableThemes"
+          :key="theme.value"
+          :value="theme.value"
         >
           {{ theme.name }}
         </option>
@@ -21,32 +24,30 @@ import { Component } from 'vue-property-decorator'
 
 @Component({
   name: 'SettingsPanel',
-
 })
 export default class SettingsPanel extends Vue {
-
   settings = {
     theme: 'cpt-obvious',
   }
   availableThemes = [
     {
       value: 'cpt-obvious',
-      name: 'Cpt. Obvious'
+      name: 'Cpt. Obvious',
     },
     {
       value: 'neumorpheus',
-      name: 'NeuMorpheus'
+      name: 'NeuMorpheus',
     },
     {
       value: 'c64',
-      name: 'C64'
-    }
+      name: 'C64',
+    },
   ]
 
   saveSettings() {
     console.log(this.settings)
   }
-  
+
   mounted() {
     if (localStorage.getItem('estimateMeTheme')) {
       this.settings.theme = localStorage.getItem('estimateMeTheme')!
@@ -55,7 +56,7 @@ export default class SettingsPanel extends Vue {
 }
 </script>
 
-<style scoped lang='scss'>
+<style scoped lang="scss">
 .settings {
   text-align: left;
   color: var(--GLOBAL_TEXT_COLOR);
@@ -74,7 +75,10 @@ export default class SettingsPanel extends Vue {
       max-width: 100%;
       padding: var(--buttonPadding, 0.75rem);
       border: var(--buttonBorder, var(--GLOBAL_BORDER_DEFAULT, none));
-      border-radius: var(--buttonBorderRadius, var(--GLOBAL_BORDER_RADIUS_DEFAULT));
+      border-radius: var(
+        --buttonBorderRadius,
+        var(--GLOBAL_BORDER_RADIUS_DEFAULT)
+      );
       background-color: transparent;
       color: var(--inputColor, var(--GLOBAL_TEXT_COLOR));
       font-size: 1rem;
@@ -83,11 +87,11 @@ export default class SettingsPanel extends Vue {
       opacity: 0.8;
     }
 
-    select:active, select:focus {
+    select:active,
+    select:focus {
       outline: none;
       box-shadow: none;
     }
   }
 }
-
 </style>

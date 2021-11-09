@@ -1,6 +1,6 @@
 <template>
   <div id="app" :class="theme">
-    <Header :room-name='roomName' @theme-change='setTheme' />
+    <Header :room-name="roomName" @theme-change="setTheme" />
     <main>
       <router-view></router-view>
     </main>
@@ -20,23 +20,21 @@ import Header from './components/header.vue'
     BaseButton,
     SettingsPanel,
     Header,
-  }
+  },
 })
 export default class App extends Vue {
-
   showSettings = false
   theme = 'cpt-obvious'
 
   @Watch('theme')
   onThemeChange(theme: string) {
-    localStorage.setItem('estimateMeTheme', theme);
+    localStorage.setItem('estimateMeTheme', theme)
   }
-
 
   get isRoom() {
     return this.$route.name === 'room'
   }
-  
+
   get roomName() {
     return this.isRoom ? this.$route.params.roomName : null
   }
@@ -44,7 +42,7 @@ export default class App extends Vue {
   toggleSettings() {
     this.showSettings = !this.showSettings
   }
-    
+
   setTheme(value: string) {
     this.theme = value
   }
@@ -79,24 +77,24 @@ main {
 /* THEMES */
 
 .cpt-obvious {
-  --GLOBAL_TEXT_COLOR: #102A43;
-  --GLOBAL_TEXT_COLOR_LIGHT: #627D98;
-  --GLOBAL_TEXT_COLOR_LIGHTEST: #9FB3C8;
+  --GLOBAL_TEXT_COLOR: #102a43;
+  --GLOBAL_TEXT_COLOR_LIGHT: #627d98;
+  --GLOBAL_TEXT_COLOR_LIGHTEST: #9fb3c8;
   --GLOBAL_TEXT_COLOR_WHITE: white;
   --GLOBAL_BACKGROUND: white;
-  --GLOBAL_BACKGROUND_ACCENT_DARK: #9FB3C8;
-  --GLOBAL_BACKGROUND_ACCENT: #D9E2EC;
-  --GLOBAL_BACKGROUND_ACCENT_LIGHT: #F0F4F8;
+  --GLOBAL_BACKGROUND_ACCENT_DARK: #9fb3c8;
+  --GLOBAL_BACKGROUND_ACCENT: #d9e2ec;
+  --GLOBAL_BACKGROUND_ACCENT_LIGHT: #f0f4f8;
   --GLOBAL_FONT: 'Avenir', 'Roboto', Helvetica, Arial, sans-serif;
   --GLOBAL_TEXT_ALIGN: left;
-  --GLOBAL_PRIMARY_COLOR_LIGHT: #62B0E8;
-  --GLOBAL_PRIMARY_COLOR: #2680C2;
-  --GLOBAL_PRIMARY_COLOR_DARK: #0F609B;
-  --GLOBAL_SECONDARY_COLOR: #17B897;
+  --GLOBAL_PRIMARY_COLOR_LIGHT: #62b0e8;
+  --GLOBAL_PRIMARY_COLOR: #2680c2;
+  --GLOBAL_PRIMARY_COLOR_DARK: #0f609b;
+  --GLOBAL_SECONDARY_COLOR: #17b897;
   --GLOBAL_SECONDARY_COLOR_DARK: #048271;
-  --GLOBAL_SUCCESS_COLOR: #2DCCA7;
-  --GLOBAL_DANGER_COLOR: #D64545;
-  --GLOBAL_DANGER_COLOR_DARK: #A61B1B;
+  --GLOBAL_SUCCESS_COLOR: #2dcca7;
+  --GLOBAL_DANGER_COLOR: #d64545;
+  --GLOBAL_DANGER_COLOR_DARK: #a61b1b;
   --GLOBAL_GRID_LINE_COLOR: var(--GLOBAL_TEXT_COLOR_LIGHT);
   --GLOBAL_BORDER_DEFAULT: 1px solid var(--GLOBAL_TEXT_COLOR);
   --GLOBAL_BORDER_ACTIVE: 1px solid var(--GLOBAL_ACCENT_COLOR);
@@ -110,24 +108,24 @@ main {
   --headerTextColor: var(--GLOBAL_TEXT_COLOR_WHITE);
 }
 
-@media(prefers-color-scheme: dark) {
+@media (prefers-color-scheme: dark) {
   .cpt-obvious {
-    --GLOBAL_TEXT_COLOR: #F0F4F8;
-    --GLOBAL_TEXT_COLOR_LIGHT: #BCCCDC;
-    --GLOBAL_TEXT_COLOR_LIGHTEST: #9FB3C8;
-    --GLOBAL_TEXT_COLOR_WHITE: #102A43;
-    --GLOBAL_BACKGROUND: #102A43;
+    --GLOBAL_TEXT_COLOR: #f0f4f8;
+    --GLOBAL_TEXT_COLOR_LIGHT: #bcccdc;
+    --GLOBAL_TEXT_COLOR_LIGHTEST: #9fb3c8;
+    --GLOBAL_TEXT_COLOR_WHITE: #102a43;
+    --GLOBAL_BACKGROUND: #102a43;
     --GLOBAL_BACKGROUND_ACCENT_DARK: #486581;
     --GLOBAL_BACKGROUND_ACCENT: #486581;
-    --GLOBAL_BACKGROUND_ACCENT_LIGHT: #334E68;
-    --GLOBAL_PRIMARY_COLOR_LIGHT: #62B0E8;
-    --GLOBAL_PRIMARY_COLOR: #2680C2;
-    --GLOBAL_PRIMARY_COLOR_DARK: #0F609B;
-    --GLOBAL_SECONDARY_COLOR: #17B897;
+    --GLOBAL_BACKGROUND_ACCENT_LIGHT: #334e68;
+    --GLOBAL_PRIMARY_COLOR_LIGHT: #62b0e8;
+    --GLOBAL_PRIMARY_COLOR: #2680c2;
+    --GLOBAL_PRIMARY_COLOR_DARK: #0f609b;
+    --GLOBAL_SECONDARY_COLOR: #17b897;
     --GLOBAL_SECONDARY_COLOR_DARK: #048271;
-    --GLOBAL_SUCCESS_COLOR: #2DCCA7;
-    --GLOBAL_DANGER_COLOR: #D64545;
-    --GLOBAL_DANGER_COLOR_DARK: #A61B1B;
+    --GLOBAL_SUCCESS_COLOR: #2dcca7;
+    --GLOBAL_DANGER_COLOR: #d64545;
+    --GLOBAL_DANGER_COLOR_DARK: #a61b1b;
     --headerBackground: var(--GLOBAL_PRIMARY_COLOR_DARK);
     --inputBackground: var(--GLOBAL_BACKGROUND_ACCENT_LIGHT);
   }
@@ -146,8 +144,8 @@ main {
   --GLOBAL_ACCENT_COLOR: #4b98bf;
   --GLOBAL_ACCENT_COLOR_DARK: #5ab9ea;
   --GLOBAL_GRID_LINE_COLOR: var(--GLOBAL_TEXT_COLOR_LIGHT);
-  --GLOBAL_DANGER_COLOR: #D64545;
-  --GLOBAL_DANGER_COLOR_DARK: #A61B1B;
+  --GLOBAL_DANGER_COLOR: #d64545;
+  --GLOBAL_DANGER_COLOR_DARK: #a61b1b;
 
   --boxShadow200: inset 6px 6px 10px 0 rgba(0, 0, 0, 0.2),
     inset -6px -6px 10px 0 rgba(255, 255, 255, 0.5);
@@ -169,28 +167,27 @@ main {
 
   --estimationSectionBoxShadow: var(--boxShadow400);
   --estimationBackground: var(--GLOBAL_BACKGROUND);
-
 }
 
 .c64 {
-  --GLOBAL_TEXT_COLOR: rgb(166,167,253);
-  --GLOBAL_TEXT_COLOR_LIGHT: rgb(166,167,253);
-  --GLOBAL_TEXT_COLOR_LIGHTEST: rgb(166,167,253);
+  --GLOBAL_TEXT_COLOR: rgb(166, 167, 253);
+  --GLOBAL_TEXT_COLOR_LIGHT: rgb(166, 167, 253);
+  --GLOBAL_TEXT_COLOR_LIGHTEST: rgb(166, 167, 253);
   --GLOBAL_TEXT_COLOR_WHITE: white;
-  --GLOBAL_BACKGROUND: rgb(68,74,227);
+  --GLOBAL_BACKGROUND: rgb(68, 74, 227);
   --GLOBAL_BACKGROUND_ACCENT: rgb(78, 83, 228);
   --GLOBAL_BACKGROUND_ACCENT_LIGHT: rgb(94, 98, 230);
-  --GLOBAL_PRIMARY_COLOR_LIGHT: rgb(166,167,253);
-  --GLOBAL_PRIMARY_COLOR: rgb(166,167,253);
-  --GLOBAL_PRIMARY_COLOR_DARK: rgb(166,167,253);
-  --GLOBAL_SECONDARY_COLOR: rgb(166,167,253);
-  --GLOBAL_SECONDARY_COLOR_DARK: rgb(166,167,253);
-  --GLOBAL_SUCCESS_COLOR: rgb(166,167,253);
-  --GLOBAL_DANGER_COLOR: rgb(166,167,253);
-  --GLOBAL_DANGER_COLOR_DARK: rgb(166,167,253);
+  --GLOBAL_PRIMARY_COLOR_LIGHT: rgb(166, 167, 253);
+  --GLOBAL_PRIMARY_COLOR: rgb(166, 167, 253);
+  --GLOBAL_PRIMARY_COLOR_DARK: rgb(166, 167, 253);
+  --GLOBAL_SECONDARY_COLOR: rgb(166, 167, 253);
+  --GLOBAL_SECONDARY_COLOR_DARK: rgb(166, 167, 253);
+  --GLOBAL_SUCCESS_COLOR: rgb(166, 167, 253);
+  --GLOBAL_DANGER_COLOR: rgb(166, 167, 253);
+  --GLOBAL_DANGER_COLOR_DARK: rgb(166, 167, 253);
   --GLOBAL_GRID_LINE_COLOR: var(--GLOBAL_TEXT_COLOR);
   --GLOBAL_BORDER_RADIUS_DEFAULT: 1px;
-  --GLOBAL_BORDER_DEFAULT: 4px solid rgb(166,167,253);
+  --GLOBAL_BORDER_DEFAULT: 4px solid rgb(166, 167, 253);
   --GLOBAL_FONT: 'Courier New', 'Menlo', Helvetica, Arial, sans-serif;
   --GLOBAL_TEXT_ALIGN: left;
   --GLOBAL_ACCENT_COLOR: white;
@@ -199,5 +196,4 @@ main {
   --headerTextColor: white;
   --textButtonColor: white;
 }
-
 </style>

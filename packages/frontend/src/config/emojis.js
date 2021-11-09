@@ -534,7 +534,7 @@ export default {
   },
   Symbols: {
     keycap_ten: '🔟',
-    '1234': '🔢',
+    1234: '🔢',
     symbols: '🔣',
     capital_abcd: '🔠',
     abcd: '🔡',
@@ -620,7 +620,7 @@ export default {
     heavy_minus_sign: '➖',
     heavy_division_sign: '➗',
     white_flower: '💮',
-    '100': '💯',
+    100: '💯',
     radio_button: '🔘',
     link: '🔗',
     curly_loop: '➰',

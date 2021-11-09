@@ -12,5 +12,5 @@ export const createUser = (id: string): User => ({
   name: '',
   estimation: null,
   room: null,
-  roles: []
+  roles: [],
 })

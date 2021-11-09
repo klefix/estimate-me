@@ -13,7 +13,9 @@
     <div class="options">
       <BaseButton variant="text" @click="disconnect">Reconnect</BaseButton>
       <BaseButton variant="danger" to="/">Leave</BaseButton>
-      <BaseButton variant="secondary" @click="copyLink">{{ justCopied ? 'Copied!' : 'Copy Link' }}</BaseButton>
+      <BaseButton variant="secondary" @click="copyLink">{{
+        justCopied ? 'Copied!' : 'Copy Link'
+      }}</BaseButton>
     </div>
   </div>
 </template>
@@ -30,7 +32,6 @@ import { Component } from 'vue-property-decorator'
   },
 })
 export default class UserControls extends Vue {
-
   name = ''
   timeoutId = undefined
   justCopied = false
@@ -76,7 +77,7 @@ export default class UserControls extends Vue {
   margin: 2rem 0;
 }
 
-@media(min-width: 768px) {
+@media (min-width: 768px) {
   .userControls {
     grid-template-columns: 2fr 1fr;
     grid-gap: 0.5rem;

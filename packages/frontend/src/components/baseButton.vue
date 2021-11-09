@@ -21,12 +21,10 @@ function variantValidator(variant: string) {
   name: 'BaseButton',
 })
 export default class BaseButton extends Vue {
-
-
   @Prop({ type: String }) tag?: string
-  
-  @Prop({ type: String, validator: variantValidator, default: 'secondary' }) variant!: string
 
+  @Prop({ type: String, validator: variantValidator, default: 'secondary' })
+  variant!: string
 
   get comp() {
     if (this.$attrs.to) {
@@ -35,7 +33,8 @@ export default class BaseButton extends Vue {
     return 'button'
   }
 }
-</script>>
+</script>
+>
 
 <style lang="scss" scoped>
 .button {
