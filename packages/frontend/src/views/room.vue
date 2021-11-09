@@ -131,7 +131,7 @@ export default class Room extends Vue {
     }
   }
 
-  get currentUser(): User {
+  get currentUser(): User | undefined {
     return this.users.find((user) => user.id === this.$socket.client.id)
   }
 
