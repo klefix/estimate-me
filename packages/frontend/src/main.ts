@@ -14,7 +14,7 @@ import './assets/scss/main.scss'
 const { VUE_APP_SERVER_URI } = process.env
 
 // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-export const SocketInstance = socketClient(VUE_APP_SERVER_URI!)
+export const socketInstance = socketClient(VUE_APP_SERVER_URI!)
 
 const routes = [
   { path: '/', name: 'index', component: Intro },
@@ -26,7 +26,7 @@ const router = new VueRouter({
 })
 
 Vue.use(VueRouter)
-Vue.use(VueSocketIOExt, SocketInstance)
+Vue.use(VueSocketIOExt, socketInstance)
 
 Vue.config.productionTip = false
 
