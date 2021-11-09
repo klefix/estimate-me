@@ -3,7 +3,7 @@ import db from './db'
 
 export const users = db.addCollection<User>('users')
 
-export function isAdmin(user: User) {
+export function isAdmin(user: User): boolean {
   return user.roles.includes(Role.ADMIN)
 }
 

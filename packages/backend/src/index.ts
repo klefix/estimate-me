@@ -15,7 +15,6 @@ const app = express()
 
 let server
 if (ENABLE_SSL && SSL_KEY_PATH && SSL_CERT_PATH) {
-  const {} = process.env
   server = https.createServer(
     {
       key: fs.readFileSync(SSL_KEY_PATH),
@@ -46,7 +45,11 @@ import { User, Room, Role } from '@estimate-me/api'
 io.on('connection', function (socket) {
   log(`user ${socket.id} connected`)
 
-  const currentUser = users.insert(createUser(socket.id))!
+  const currentUser = users.insert(createUser(socket.id))
+
+  if (!currentUser) {
+    throw new Error(`Could not create user ${socket.id}`)
+  }
 
   let currentRoom: Room | null = null
 
@@ -55,7 +58,7 @@ io.on('connection', function (socket) {
     return users.find({ room: currentRoom.name })
   }
 
-  const emitToRoom = (channel: string, payload?: object) => {
+  const emitToRoom = <Payload>(channel: string, payload?: Payload) => {
     if (!currentUser?.room) return
     io.to(currentUser.room).emit(channel, payload)
   }
@@ -67,11 +70,16 @@ io.on('connection', function (socket) {
   const areEstimationsComplete = () =>
     roomUsers().every((user) => user.estimation !== null)
 
-  const maskEstimations = (users: User[]) =>
-    users.map((user) => ({
+  const maskEstimations = (users: User[]) => {
+    if (!currentRoom) {
+      return
+    }
+    const room = currentRoom
+    return users.map((user) => ({
       ...user,
-      estimation: renderEstimation(user, currentRoom),
+      estimation: renderEstimation(user, room),
     }))
+  }
 
   const revealEstimations = () => {
     if (currentRoom) {

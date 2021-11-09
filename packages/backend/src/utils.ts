@@ -1,4 +1,6 @@
-export const log = (msg: string, msg2?: any) => {
+import { Room, User } from '@estimate-me/api'
+
+export const log = (msg: string, msg2?: string | string[]): void => {
   const date = new Date().toDateString().toLocaleString()
 
   let str = `[${date}]: ${msg}`
@@ -8,10 +10,10 @@ export const log = (msg: string, msg2?: any) => {
   console.log(str)
 }
 
-type User = any // TODO actual type
-type Room = any // TODO actual type
-
-export const renderEstimation = (user: User, currentRoom: Room) => {
+export const renderEstimation = (
+  user: User,
+  currentRoom: Room
+): boolean | string | null => {
   if (currentRoom.estimationsVisible && user.estimation !== null) {
     return user.estimation
   }
