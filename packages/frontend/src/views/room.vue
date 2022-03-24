@@ -150,6 +150,7 @@ export default class Room extends Vue {
 
   destroyed(): void {
     if (this.reconnectionInterval) clearInterval(this.reconnectionInterval)
+    this.$socket.client.disconnect()
   }
 
   @Socket()
