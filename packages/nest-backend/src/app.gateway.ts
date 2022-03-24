@@ -6,62 +6,35 @@ import {
   OnGatewayConnection,
   OnGatewayDisconnect,
 } from '@nestjs/websockets'
-import { Controller, Get, Logger } from '@nestjs/common'
+import { Logger } from '@nestjs/common'
 import { Socket, Server } from 'socket.io'
-import { Role, Room, User } from '@estimate-me/api'
-
-interface ServerRoom extends Room {
-  users: Map<string, ServerUser>
-}
-
-interface ServerUser extends Omit<User, 'room'> {
-  room: ServerRoom | null
-}
-
-function createUser(id: string): ServerUser {
-  return {
-    id: id,
-    name: '',
-    estimation: null,
-    room: null,
-    roles: [],
-  }
-}
-
-function arrayFromMap<T>(map: Map<string, T>): Array<T> {
-  return Array.from(map.values())
-}
-
-function maskEstimations(
-  estimationsVisible: boolean,
-  users: ServerUser[],
-): ServerUser[] {
-  return users.map((user) => ({
-    ...user,
-    estimation: estimationsVisible ? user.estimation : null,
-  }))
-}
-
-function areEstimationsComplete(room: ServerRoom): boolean {
-  return arrayFromMap(room.users).every((user) => user.estimation !== null)
-}
-
-function isAdmin(user: ServerUser): boolean {
-  return user.roles.includes(Role.ADMIN)
-}
+import { Role } from '@estimate-me/api'
+import { AppService, ServerRoom, ServerUser } from './app.service'
+import {
+  areEstimationsComplete,
+  arrayFromMap,
+  createUser,
+  isAdmin,
+  maskEstimations,
+} from './utils'
 
 @WebSocketGateway({
   cors: {
     origin: '*',
   },
 })
-@Controller()
 export class AppGateway
   implements OnGatewayInit, OnGatewayConnection, OnGatewayDisconnect
 {
-  private rooms: Map<string, ServerRoom> = new Map()
+  constructor(private appService: AppService) {}
 
-  private users: Map<string, ServerUser> = new Map()
+  get rooms() {
+    return this.appService.rooms
+  }
+
+  get users() {
+    return this.appService.users
+  }
 
   private createRoom(name: string): ServerRoom {
     const room: ServerRoom = {
@@ -74,19 +47,6 @@ export class AppGateway
     return room
   }
 
-  private removeUserFromRoom(user: ServerUser, room: ServerRoom) {
-    this.rooms.get(room.name)?.users.delete(user.id)
-  }
-
-  @Get('/status')
-  getStats(): object {
-    return {
-      server: 'running',
-      users: this.users.size,
-      rooms: this.rooms.size,
-    }
-  }
-
   @WebSocketServer() server: Server
   private logger: Logger = new Logger('AppGateway')
 
@@ -95,11 +55,11 @@ export class AppGateway
   }
 
   handleDisconnect(client: Socket) {
-    const user = this.getUser(client.id)
+    const user = this.appService.getUserById(client.id)
     const room = user.room
 
     if (room) {
-      this.removeUserFromRoom(user, room)
+      this.appService.removeUserFromRoom(user, room)
 
       if (room.users.size === 0) {
         this.rooms.delete(room.name)
@@ -127,10 +87,6 @@ export class AppGateway
     this.users.set(client.id, createUser(client.id))
   }
 
-  getUser(id: string): ServerUser {
-    return this.users.get(id)
-  }
-
   broadcastUserList(room: ServerRoom): void {
     this.server.emit(
       'userList',
@@ -145,7 +101,7 @@ export class AppGateway
     const room = this.rooms.get(roomName) || this.createRoom(roomName)
     client.emit('joinedRoom', roomName)
 
-    const user = this.getUser(client.id)
+    const user = this.appService.getUserById(client.id)
     if (room.users.size === 0) {
       user.roles.push(Role.ADMIN)
     }
@@ -162,12 +118,11 @@ export class AppGateway
   @SubscribeMessage('setEstimationValues')
   setEstimationValues(client: Socket, valueString: string): void {
     const values = valueString.split(',')
-    const user = this.getUser(client.id)
+    const user = this.appService.getUserById(client.id)
     if (!isAdmin(user)) {
       return
     }
 
-    console.log(values)
     user.room.estimationValues = values
     this.broadcastUserList(user.room)
     this.server.emit('estimationValuesUpdated', values)
@@ -176,7 +131,7 @@ export class AppGateway
 
   @SubscribeMessage('clearEstimations')
   clearEstimations(client: Socket): void {
-    const user = this.getUser(client.id)
+    const user = this.appService.getUserById(client.id)
     if (!isAdmin(user)) {
       return
     }
@@ -191,7 +146,7 @@ export class AppGateway
 
   @SubscribeMessage('revealEstimations')
   revealEstimations(client: Socket): void {
-    const user = this.getUser(client.id)
+    const user = this.appService.getUserById(client.id)
     if (!isAdmin(user)) {
       return
     }
@@ -202,7 +157,7 @@ export class AppGateway
 
   @SubscribeMessage('grantAdmin')
   grantAdmin(client: Socket, userId: string): void {
-    const user = this.getUser(client.id)
+    const user = this.appService.getUserById(client.id)
     if (!isAdmin(user)) {
       return
     }
@@ -219,7 +174,7 @@ export class AppGateway
   setName(client: Socket, name: string): void {
     this.logger.log(`User ${client.id} set their name to ${name}`)
 
-    const user = this.getUser(client.id)
+    const user = this.appService.getUserById(client.id)
     user.name = name
 
     this.broadcastUserList(user.room)
@@ -227,7 +182,7 @@ export class AppGateway
 
   @SubscribeMessage('setEstimation')
   setEstimation(client: Socket, estimation: string): void {
-    const user = this.getUser(client.id)
+    const user = this.appService.getUserById(client.id)
     user.estimation = estimation
 
     if (areEstimationsComplete(user.room)) {
@@ -239,7 +194,7 @@ export class AppGateway
 
   @SubscribeMessage('setIcon')
   setIcon(client: Socket, icon: string): void {
-    const user = this.getUser(client.id)
+    const user = this.appService.getUserById(client.id)
     user.icon = icon
     this.broadcastUserList(user.room)
   }
