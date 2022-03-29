@@ -180,12 +180,12 @@ export default class Room extends Vue {
   }
 
   @Socket()
-  estimationValuesUpdated(values: string[]): void {
+  estimationValuesUpdated(values: string[]|string): void {
     console.info('estimationValuesUpdated', values)
     if (!values) {
       return
     }
-    this.estimationValues = values
+    this.estimationValues = typeof values === 'string' ? values.split(',') : values
   }
 
   reconnect(): void {
@@ -198,6 +198,7 @@ export default class Room extends Vue {
       this.joinRoom()
     }
   }
+
   joinRoom(): void {
     console.log('Joining Room...')
     this.$socket.client.emit('joinRoom', this.roomName)
