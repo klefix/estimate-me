@@ -29,5 +29,6 @@
   ],
   "_id": "estimate-me@0.0.1",
   "license": "MIT",
-  "readme": "README.md"
+  "readme": "README.md",
+  "dependencies": {}
 }
