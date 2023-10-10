@@ -8,7 +8,6 @@ import {
 } from '@nestjs/websockets'
 import { Logger } from '@nestjs/common'
 import { Socket, Server } from 'socket.io'
-import { Role } from '../../@types/api'
 import { AppService, ServerRoom, ServerUser } from './app.service'
 import {
   areEstimationsComplete,
@@ -17,6 +16,8 @@ import {
   isAdmin,
   maskEstimations,
 } from './utils'
+
+const ROLE_ADMIN = 'admin'
 
 @WebSocketGateway({
   cors: {
@@ -67,7 +68,7 @@ export class AppGateway
         const otherUsers = room.users
         console.log(otherUsers.values())
         const [nextUser] = room.users.values()
-        nextUser.roles.push(Role.ADMIN)
+        nextUser.roles.push(ROLE_ADMIN)
       }
     }
     this.users.delete(user.id)
@@ -103,7 +104,7 @@ export class AppGateway
 
     const user = this.appService.getUserById(client.id)
     if (room.users.size === 0) {
-      user.roles.push(Role.ADMIN)
+      user.roles.push(ROLE_ADMIN)
     }
     user.room = room
 
@@ -164,7 +165,7 @@ export class AppGateway
 
     const otherUser = this.users.get(userId)
     if (otherUser) {
-      otherUser.roles.push(Role.ADMIN)
+      otherUser.roles.push(ROLE_ADMIN)
       user.roles = [] // TODO: remove admin role instead of clearing them all
       this.broadcastUserList(user.room)
     }
