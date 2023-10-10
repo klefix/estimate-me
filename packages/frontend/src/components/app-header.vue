@@ -11,7 +11,7 @@
 import SettingsPanel from './settingsPanel'
 
 export default {
-  name: 'header.vue',
+  name: 'AppHeader',
 
   components: {
     SettingsPanel,

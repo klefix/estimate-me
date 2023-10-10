@@ -1,6 +1,6 @@
 <template>
   <div id="app" :class="theme">
-    <Header :room-name="roomName" @theme-change="setTheme" />
+    <AppHeader :room-name="roomName" @theme-change="setTheme" />
     <main>
       <router-view></router-view>
     </main>
@@ -12,14 +12,14 @@ import Vue from 'vue'
 import BaseButton from './components/baseButton.vue'
 import SettingsPanel from './components/settingsPanel.vue'
 import { Component, Watch } from 'vue-property-decorator'
-import Header from './components/header.vue'
+import AppHeader from '@/components/app-header.vue'
 
 @Component({
   name: 'App',
   components: {
+    AppHeader,
     BaseButton,
     SettingsPanel,
-    Header,
   },
 })
 export default class App extends Vue {

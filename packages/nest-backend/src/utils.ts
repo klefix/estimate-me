@@ -1,5 +1,5 @@
 import { ServerRoom, ServerUser } from './app.service'
-import { Role } from '@estimate-me/api'
+import { Role } from '../../@types/api'
 
 export function createUser(id: string): ServerUser {
   return {

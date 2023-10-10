@@ -8,7 +8,7 @@ import {
 } from '@nestjs/websockets'
 import { Logger } from '@nestjs/common'
 import { Socket, Server } from 'socket.io'
-import { Role } from '@estimate-me/api'
+import { Role } from '../../@types/api'
 import { AppService, ServerRoom, ServerUser } from './app.service'
 import {
   areEstimationsComplete,

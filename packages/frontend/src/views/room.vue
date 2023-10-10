@@ -54,10 +54,10 @@ import EstimationValues from '../components/estimationValues.vue'
 import UserCard from '../components/userCard.vue'
 import UserControls from '../components/userControls.vue'
 import { Component } from 'vue-property-decorator'
-import { User, Role } from '@estimate-me/api'
-import { findLastIndex } from '../utils/array'
+import { findLastIndex } from '@/utils/array'
 
 import { Socket } from 'vue-socket.io-extended'
+import { User } from '../../../@types/api'
 
 @Component({
   components: {
@@ -139,7 +139,7 @@ export default class Room extends Vue {
     if (!this.currentUser) {
       return false
     }
-    return this.currentUser.roles.includes(Role.ADMIN)
+    return this.currentUser.roles.includes('admin')
   }
 
   mounted(): void {
@@ -181,12 +181,13 @@ export default class Room extends Vue {
   }
 
   @Socket()
-  estimationValuesUpdated(values: string[]|string): void {
+  estimationValuesUpdated(values: string[] | string): void {
     console.info('estimationValuesUpdated', values)
     if (!values) {
       return
     }
-    this.estimationValues = typeof values === 'string' ? values.split(',') : values
+    this.estimationValues =
+      typeof values === 'string' ? values.split(',') : values
   }
 
   reconnect(): void {
