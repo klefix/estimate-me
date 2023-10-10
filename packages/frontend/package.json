@@ -27,14 +27,13 @@
     "vue-socket.io-extended": "^4.0.1"
   },
   "devDependencies": {
-    "@types/node": "^18.11.9",
+    "@types/node": "^18.18.4",
     "@typescript-eslint/eslint-plugin": "^6.7.5",
     "@typescript-eslint/parser": "^6.7.5",
     "@vue/cli-plugin-babel": "~5.0.8",
     "@vue/cli-plugin-eslint": "~5.0.8",
     "@vue/cli-plugin-typescript": "~5.0.8",
-    "@vue/cli-service": "~4.2.0",
-    "@zerollup/ts-transform-paths": "^1.7.18",
+    "@vue/cli-service": "~5.0.8",
     "eslint": "^8.51.0",
     "eslint-plugin-prettier": "^3.3.1",
     "eslint-plugin-vue": "^9.17.0",
