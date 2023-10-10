@@ -18,7 +18,4 @@
     "forceConsistentCasingInFileNames": false,
     "noFallthroughCasesInSwitch": false,
   },
-  "include": [
-    "../@types/*.ts",
-  ]
 }
