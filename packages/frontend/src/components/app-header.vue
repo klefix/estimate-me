@@ -1,7 +1,7 @@
 <template>
   <header class="header">
-    <img src="../assets/logo.png" alt="logo" class="logo" />
-    <h2 class="marginRight">estimate-me</h2>
+    <img src="../assets/estimate-me.png" alt="logo" class="logo" />
+    <h2 class="marginRight">Estimagic</h2>
     <h2 v-if="roomName" class="marginRight">room: '{{ roomName }}'</h2>
     <SettingsPanel v-on="$listeners" />
   </header>
