@@ -1,19 +1,16 @@
 <template>
   <aside class="settings">
     <form class="form" @submit.prevent="saveSettings">
-      <h2 class="title">theme</h2>
-      <select
-        v-model="settings.theme"
-        @change="$emit('theme-change', settings.theme)"
+      <h2 class="title">Theme:</h2>
+      <BaseButton
+        class="theme-button"
+        variant="primary"
+        v-for="theme in availableThemes"
+        :key="theme.value"
+        @click="$emit('theme-change', theme.value)"
       >
-        <option
-          v-for="theme in availableThemes"
-          :key="theme.value"
-          :value="theme.value"
-        >
-          {{ theme.name }}
-        </option>
-      </select>
+        {{ theme.name }}
+      </BaseButton>
     </form>
   </aside>
 </template>
@@ -21,9 +18,13 @@
 <script lang="ts">
 import Vue from 'vue'
 import { Component } from 'vue-property-decorator'
+import BaseButton from '../components/baseButton.vue'
 
 @Component({
   name: 'SettingsPanel',
+  components: {
+    BaseButton,
+  },
 })
 export default class SettingsPanel extends Vue {
   settings = {
@@ -58,6 +59,9 @@ export default class SettingsPanel extends Vue {
 </script>
 
 <style scoped lang="scss">
+.theme-button {
+  margin-right: 1rem;
+}
 .settings {
   text-align: left;
   color: var(--GLOBAL_TEXT_COLOR);

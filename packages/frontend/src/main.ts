@@ -11,6 +11,9 @@ import Room from './views/room.vue'
 import '@fortawesome/fontawesome-free/css/all.css'
 import './assets/scss/main.scss'
 
+import { inject } from '@vercel/analytics'
+inject()
+
 const { VUE_APP_SERVER_URI } = process.env
 
 // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
