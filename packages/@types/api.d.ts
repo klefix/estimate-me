@@ -1,4 +1,8 @@
-import { Role } from './role'
+export interface Room {
+  name: string
+  estimationsVisible: boolean
+  estimationValues: string[]
+}
 
 export interface User {
   id: string

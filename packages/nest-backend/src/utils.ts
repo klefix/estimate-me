@@ -1,5 +1,6 @@
 import { ServerRoom, ServerUser } from './app.service'
-import { Role } from '@estimate-me/api'
+
+const ROLE_ADMIN = 'admin'
 
 export function createUser(id: string): ServerUser {
   return {
@@ -30,5 +31,5 @@ export function areEstimationsComplete(room: ServerRoom): boolean {
 }
 
 export function isAdmin(user: ServerUser): boolean {
-  return user.roles.includes(Role.ADMIN)
+  return user.roles.includes(ROLE_ADMIN)
 }

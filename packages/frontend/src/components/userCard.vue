@@ -57,9 +57,9 @@
 import { EmojiPicker } from 'vue-emoji-picker'
 import emojis from '../config/emojis'
 
-import { Role, User } from '@estimate-me/api'
 import Vue from 'vue'
 import { Component, Prop, Ref } from 'vue-property-decorator'
+import type { User } from '../../../@types/api'
 
 @Component({
   name: 'UserCard',
@@ -87,7 +87,7 @@ export default class UserControls extends Vue {
     if (!user) {
       return false
     }
-    return user.roles.includes(Role.ADMIN)
+    return user.roles.includes('admin')
   }
 
   grantAdmin(user: User): void {

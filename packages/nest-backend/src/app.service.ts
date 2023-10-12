@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common'
-import { Room, User } from '@estimate-me/api'
+import type { Room, User } from './@types/api'
 
 export interface ServerRoom extends Room {
   users: Map<string, ServerUser>
