@@ -1,6 +1,6 @@
 <template>
   <header class="header">
-    <img src="../assets/logo.png" alt="logo" class="logo" />
+    <LogoCutout class="logo" />
     <h2 class="marginRight">estimate-me</h2>
     <h2 v-if="roomName" class="marginRight">room: '{{ roomName }}'</h2>
     <SettingsPanel v-on="$listeners" />
@@ -9,11 +9,13 @@
 
 <script>
 import SettingsPanel from './settingsPanel'
+import LogoCutout from "./logo-cutout.vue";
 
 export default {
   name: 'AppHeader',
 
   components: {
+    LogoCutout,
     SettingsPanel,
   },
 
@@ -47,8 +49,8 @@ export default {
   .logo {
     height: 2.75rem;
     margin-right: 0.75rem;
-    filter: opacity(0.5)
-      drop-shadow(0 0 0 var(--headerTextColor, var(--GLOBAL_TEXT_COLOR)));
+    filter: drop-shadow(0 0 0 var(--headerTextColor, var(--GLOBAL_TEXT_COLOR)));
+    color: var(--headerTextColor, var(--GLOBAL_TEXT_COLOR));
   }
 
   .marginRight {
