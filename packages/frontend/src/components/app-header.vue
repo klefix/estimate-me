@@ -3,7 +3,7 @@
     <LogoCutout class="logo" />
     <h2 class="marginRight">estimate-me</h2>
     <h2 v-if="roomName" class="marginRight">room: '{{ roomName }}'</h2>
-    <SettingsPanel v-on="$listeners" />
+    <SettingsPanel class="settings" v-on="$listeners" />
   </header>
 </template>
 
@@ -55,6 +55,10 @@ export default {
 
   .marginRight {
     margin-right: 9.375rem;
+  }
+
+  .settings {
+    margin-left: auto;
   }
 }
 </style>
