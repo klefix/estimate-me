@@ -16,7 +16,7 @@
         :class="{ pointer: user.id === currentUser.id }"
         slot="emoji-invoker"
         slot-scope="{ events: { click: clickEvent } }"
-        @click.stop="handleEmojiClick && clickEvent()"
+        @click.stop="user.id === currentUser.id && clickEvent()"
       >
         <template v-if="user.icon">
           {{ user.icon }}
@@ -92,11 +92,6 @@ export default class UserControls extends Vue {
 
   grantAdmin(user: User): void {
     this.$socket.client.emit('grantAdmin', user.id)
-  }
-
-  handleEmojiClick() {
-    console.warn('yeah')
-    this.user.id === this.currentUser.id
   }
 
   changeIcon(icon: string): void {

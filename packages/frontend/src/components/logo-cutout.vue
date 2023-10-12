@@ -28,10 +28,3 @@ import { Component } from 'vue-property-decorator'
 
 export default class Logo extends Vue {}
 </script>
-
-<style lang="scss">
-.card {
-  fill: currentColor;
-  filter: invert(1);
-}
-</style>
