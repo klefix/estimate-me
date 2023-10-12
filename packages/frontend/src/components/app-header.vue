@@ -1,7 +1,7 @@
 <template>
   <header class="header">
     <LogoCutout class="logo" />
-    <h2 class="marginRight">estimate-me</h2>
+    <h2 class="marginRight">Estimagic</h2>
     <h2 v-if="roomName" class="marginRight">room: '{{ roomName }}'</h2>
     <SettingsPanel class="settings" v-on="$listeners" />
   </header>
